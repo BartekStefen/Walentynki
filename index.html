@@ -331,6 +331,14 @@
 <audio id="bgm2" src="piosenka2.mp3" loop preload="auto"></audio>
 
     <div class="container">
+        <div id="custom-alert" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:20000; align-items:center; justify-content:center;">
+    <div style="background:white; padding:25px; border-radius:20px; border:3px solid #FF69B4; width:85%; max-width:400px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <p id="custom-alert-text" style="font-size:1.1em; color:#222; margin-bottom:20px; line-height:1.4; max-height: 40vh; /* Zapobiega zbyt długim tekstom na małych ekranach */
+    overflow-y: auto;
+    padding: 0 5px;"></p>
+        <button onclick="closeCustomAlert()" style="width:100%; background:#FF69B4; color:white; border:none; padding:15px; border-radius:25px; font-weight:bold; cursor:pointer;">OK ❤️</button>
+    </div>
+</div>
         
         <div class="music-panel">
             <small>🎵 Wybierz klimat:</small><br>
