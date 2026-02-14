@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Walentynki ❤️</title>
+    <style>
+        /* --- STYLE FINAŁOWEJ ANIMACJI --- */
+#grand-finale-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #fff0f5 0%, #ffc0cb 100%); /* Różowy gradient */
+    z-index: 10000; /* Musi być na samym wierzchu */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    animation: fadeInSlow 2s ease-in;
+}
+
+.finale-content {
+    text-align: center;
+}
+
+/* Wielkie bijące serce */
+.beating-heart-giant {
+    font-size: 150px;
+    animation: heartbeatGiant 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+@keyframes heartbeatGiant {
+    0% { transform: scale(0.95); }
+    5% { transform: scale(1.1); }
+    39% { transform: scale(0.85); }
+    45% { transform: scale(1); }
+    60% { transform: scale(0.95); }
+    100% { transform: scale(0.9); }
+}
+
+/* Kontener na kwiaty */
+.flowers-delivery {
+    margin-top: 50px;
+    font-size: 80px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    overflow: hidden; /* Ukrywa kwiaty zanim wjadą */
+    padding: 20px;
+}
+
+/* Animacja pojedynczego kwiata */
+.flowers-delivery span {
+    display: inline-block;
+    transform: translateY(200%); /* Startują poza ekranem (na dole) */
+    opacity: 0;
+    animation: flowerRise 1.5s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes flowerRise {
+    0% {
+        transform: translateY(100vh) rotate(-20deg); /* Start z dołu ekranu */
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* Tekst końcowy */
+.finale-text {
+    font-size: 2em;
+    color: #d63384;
+    opacity: 0;
+    animation: fadeInSlow 2s ease-in 3s forwards; /* Pojawia się po 3 sekundach */
+}
+
+@keyframes fadeInSlow {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+        :root {
+            --pink: #FF69B4;
+            --dark: #222;
+            --light: #FFF0F5;
+            --gold: #FFD700;
+            --green: #6aaa64;
+            --orange: #c9b458;
+            --gray: #787c7e;
+            --red: #ff4d4d;
+            --blue: #1e90ff;
+        }
+@keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+.falling-heart {
+    position: fixed;
+    top: -50px;
+    z-index: 9999;
+    pointer-events: none;
+    animation: fall linear forwards;
+}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+            overflow-x: hidden;
+            padding-bottom: 50px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1, h2, h3 { color: var(--pink); margin: 10px 0; }
+        p { line-height: 1.5; }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid var(--pink);
+            position: relative;
+            min-height: 80vh;
+        }
+        #phase-match {
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+        /* --- BUTTONS --- */
+        button {
+            background-color: var(--pink);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            user-select: none;
+        }
+        button:active { transform: scale(0.95); }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        
+        .btn-game-select {
+            width: 90%;
+            padding: 15px;
+            font-size: 1.1em;
+            margin: 10px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            color: var(--pink);
+            border: 2px solid var(--pink);
+            text-align: left;
+        }
+        
+        .hidden { display: none !important; }
+        img { max-width: 100%; border-radius: 10px; border: 3px solid var(--pink); }
+
+        /* --- REASONS --- */
+        #reason-display {
+            min-height: 100px;
+            padding: 15px;
+            font-style: italic;
+            margin: 10px;
+            background: #fffafa;
+            border: 1px dashed var(--pink);
+            border-radius: 10px;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #reason-count-badge { font-size: 0.8em; color: #999; margin-top: 5px; }
+
+        /* --- TIMELINE --- */
+       /* Znajdź i zamień te linie w swoim CSS */
+.timeline-item { 
+    border-left: 3px solid var(--pink); 
+    padding-left: 15px; 
+    margin: 20px 0; 
+    text-align: left; 
+    opacity: 0.3; /* Mocniej przyciemniamy to co nieaktywne */
+    transition: opacity 0.5s; 
+}
+
+.timeline-item.active { 
+    opacity: 1 !important; /* To sprawi, że sekcja będzie jasna jak reszta strony */
+}
+
+/* Dodaj to, żeby przyciski pod filmem były ładnie wyśrodkowane */
+.timeline-item button {
+    display: block;
+    margin: 10px auto;
+}
+
+        /* --- GAME 1: MEMORY --- */
+        .memory-grid { display: grid; gap: 8px; margin-top: 15px; perspective: 1000px; justify-content: center; }
+        .grid-easy { grid-template-columns: repeat(2, 1fr); max-width: 300px; margin: 0 auto; }
+        .grid-hard { grid-template-columns: repeat(3, 1fr); }
+        .memory-card { height: 90px; position: relative; transform-style: preserve-3d; transition: transform 0.5s; }
+        .memory-card.flipped { transform: rotateY(180deg); }
+        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 2px solid var(--pink); }
+        .front { background: #ffc0cb; font-size: 24px; }
+        .back { background: white; transform: rotateY(180deg); }
+        .back img { width: 100%; height: 100%; object-fit: cover; border: none; border-radius: 6px; }
+
+        /* --- GAME 2: CATCHER --- */
+        #catcher-area { position: relative; width: 100%; height: 350px; background: #222; border-radius: 10px; overflow: hidden; margin-top: 10px; touch-action: none; }
+        #basket { 
+            position: absolute; bottom: 10px; left: 50%; 
+            width: 90px; height: 45px; background: var(--pink); border-radius: 10px; 
+            transform: translateX(-50%); display: flex; align-items: center; justify-content: center; 
+            font-size: 24px; color: white; transition: width 0.3s; border: 2px solid white;
+        }
+        .falling-item { position: absolute; font-size: 28px; top: 0; }
+        .controls { display: flex; justify-content: space-between; margin-top: 10px; }
+        .controls button { width: 40%; padding: 20px; font-size: 20px; touch-action: none; }
+        .skills-bar { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+        .skill-btn { width: 48%; font-size: 0.85em; padding: 10px; background: var(--blue); border: 2px solid #0056b3; color: white; }
+        .skill-btn:disabled { opacity: 0.5; background: #555; border-color: #333; }
+
+        /* --- GAME 3: WORDLE (MOBILE & DESKTOP) --- */
+        #wordle-container { display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
+        .w-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 4px; }
+        .w-box { width: 42px; height: 42px; border: 2px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; text-transform: uppercase; background: white; }
+        .w-correct { background-color: var(--green) !important; color: white !important; border-color: var(--green) !important; }
+        .w-present { background-color: var(--orange) !important; color: white !important; border-color: var(--orange) !important; }
+        .w-absent { background-color: var(--gray) !important; color: white !important; border-color: var(--gray) !important; }
+        
+        #wordle-keyboard { margin-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
+        .kb-row { display: flex; gap: 3px; justify-content: center; width: 100%; }
+        .kb-key { 
+            padding: 12px 0; width: 8.5%; 
+            background: #d3d6da; border-radius: 4px; 
+            font-weight: bold; cursor: pointer; user-select: none; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; color: #333;
+        }
+        .kb-wide { width: 13%; font-size: 12px; }
+        #wordle-msg { color: var(--red); font-weight: bold; height: 25px; margin-top: 5px; }
+
+        /* --- GAME 4: SLOTS --- */
+        .slots-container { display: flex; justify-content: center; gap: 10px; margin: 20px 0; background: #333; padding: 15px; border-radius: 10px; border: 4px solid var(--gold); }
+        .slot-window { width: 70px; height: 100px; background: white; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 3em; overflow: hidden; border: 2px solid #999; }
+        .spin-anim { animation: spinBlur 0.1s infinite; }
+        @keyframes spinBlur { 0% { opacity: 0.5; transform: translateY(-5px); } 50% { opacity: 1; transform: translateY(5px); } 100% { opacity: 0.5; transform: translateY(-5px); } }
+
+        /* --- GAME 5: PEDAGOGY --- */
+        .ped-question { font-size: 1.1em; margin-bottom: 20px; font-weight: bold; }
+        .ped-btn { display: block; width: 100%; margin: 10px 0; padding: 15px; border: 2px solid #ddd; background: #f9f9f9; color: #333; border-radius: 10px; text-align: left; cursor: pointer; transition: background 0.3s; }
+        .ped-btn:hover { background: #eef; border-color: var(--pink); }
+        .ped-score { font-size: 1.2em; font-weight: bold; color: var(--pink); margin-bottom: 10px; }
+        .ped-correct { background-color: var(--green) !important; color: white !important; border-color: var(--green) !important; }
+        .ped-wrong { background-color: var(--red) !important; color: white !important; border-color: var(--red) !important; }
+
+        /* --- EXTRAS --- */
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .confetti { position: fixed; width: 10px; height: 10px; top: -10px; z-index: 999; }
+        .music-panel { background: #fff; padding: 10px; border: 2px dashed var(--pink); margin-bottom: 15px; border-radius: 10px; }
+        .active-music { background: var(--pink); color: white; }
+        input[type="text"] { padding: 10px; width: 70%; border: 2px solid var(--pink); border-radius: 5px; margin-top: 10px; }
+        .choice-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 15px; align-items: center; }
+        
+        @media (max-width: 400px) {
+            .w-box { width: 34px; height: 34px; font-size: 16px; }
+            .kb-key { padding: 10px 0; font-size: 12px; }
+        }
+        /* --- NAPRAWA WYGLĄDU OSI CZASU (ZDJĘCIA I WIDEO) --- */
+
+/* 1. Ujednolicenie rozmiaru mediów */
+.timeline-item img,
+.timeline-item video {
+    width: 100%;             /* Szerokość na cały dostępny kontener */
+    max-width: 500px;        /* Ale nie szersze niż 500px na dużych ekranach */
+    height: 250px;           /* WYMUSZONA, stała wysokość dla wszystkich */
+    object-fit: cover;       /* Kluczowe! Przycina zdjęcie/film, żeby wypełniło ramkę bez deformacji */
+    border-radius: 10px;     /* Zaokrąglone rogi */
+    border: 3px solid var(--pink); /* Różowa ramka */
+    display: block;          /* Ułatwia centrowanie */
+    margin: 15px auto;       /* Odstęp góra/dół i centrowanie poziome */
+    background-color: #eee;  /* Szare tło, zanim załaduje się zdjęcie */
+}
+
+/* 2. Wyśrodkowanie przycisków pod zdjęciami */
+.timeline-item button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 150px;        /* Żeby przyciski miały podobną wielkość */
+}
+
+/* --- DOPASOWANIE DO TELEFONU (Responsive) --- */
+
+/* Na mniejszych ekranach zmniejszamy trochę wysokość, żeby nie zajmowało całego ekranu */
+@media (max-width: 600px) {
+    .timeline-item img,
+    .timeline-item video {
+        height: 180px; /* Mniejsza stała wysokość na telefonach */
+    }
+    
+    /* Opcjonalnie: zmniejszenie paddingu osi czasu na telefonie */
+    .timeline-item {
+        padding-left: 10px;
+        margin: 15px 0;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <audio id="bgm1" src="piosenka1.mp3" loop preload="auto"></audio>
+<audio id="bgm2" src="piosenka2.mp3" loop preload="auto"></audio>
+
+    <div class="container">
+        
+        <div class="music-panel">
+            <small>🎵 Wybierz klimat:</small><br>
+            <button onclick="playMusic(1, this)">1 Piosenka</button>
+            <button onclick="playMusic(2, this)">2 Piosenka</button>
+            <button onclick="stopMusic()">Stop</button>
+        </div>
+
+        <div id="phase-1">
+            <h1>Cześć Kochanie! 💖</h1>
+            <p>Zapraszam Cię do walentynkowego centrum rozrywki. Przygotowałem dla Ciebie kilka niespodzianek.</p>
+            <h3>Rozgrzewka: Dlaczego Ty?</h3>
+            <div id="reason-display">
+                <span id="reason-text">Kliknij przycisk poniżej...</span>
+            </div>
+            <button onclick="nextReason()">Odkryj kolejny powód</button>
+            <p>Postęp: <span id="reason-counter">0</span>/6 (wymagane)</p>
+            <button id="btn-start" class="hidden" onclick="changePhase(2)">Wchodzimy do gry >></button>
+        </div>
+
+        <div id="phase-2" class="hidden">
+            <h2>Nasza Oś Czasu 📅</h2>
+            <div id="tl-1" class="timeline-item active">
+                <b>Początek</b>
+                <p>To zdjęcie przypomina mi, że największe szczęście mam tuż obok siebie.</p>
+                <img src="zdjecie1.jpg" alt="Foto 1">
+                <button onclick="unlockTL(2)">Pamiętam!</button>
+            </div>
+            <div id="tl-2" class="timeline-item">
+                <b>Wspólne chwile</b>
+                <p>Tu zrozumiałem, jak bardzo chcę tworzyć z Tobą kolejne wspomnienia.</p>
+                <img src="zdjecie2.jpg" alt="Foto 2">
+                <button onclick="unlockTL(3)" disabled>Zablokowane</button>
+            </div>
+            
+            <div id="tl-3" class="timeline-item">
+                <p>Ten uśmiech to mój ulubiony widok</p>
+    <video width="100%" controls style="border-radius: 10px; border: 3px solid var(--pink); display: block;">
+        <source src="film.mp4" type="video/mp4">
+        Twoja przeglądarka nie wspiera odtwarzacza wideo.
+    </video>
+    <button onclick="unlockTL(4)" disabled style="margin-top: 10px;">Co dalej?</button>
+</div>
+            <div id="tl-4" class="timeline-item hidden timeline-special">
+                <h2 style="color: goldenrod;">📸 JEDNO WAŻNE POSTANOWIENIE 📸</h2>
+                <p style="font-size: 1.1em;">Wiem, że uciekasz przed obiektywem i nie lubisz zdjęć, ale...</p>
+                <p style="font-weight: bold;">Musimy to zmienić!</p>
+                <p>Róbmy je częściej – nie dla innych, nie na pokaz, ale <b>tylko dla nas</b>.</p>
+                <img id="refuse-gif" src="reakcja.gif" class="hidden" style="max-width: 200px; display: block; margin: 10px auto; border-radius:10px;">
+                <div class="choice-buttons">
+                    <button id="btn-promise" onclick="changePhase(3)" style="background-color: var(--gold); color: black; font-weight: bold; z-index: 10;">Obiecuję! ✨</button>
+                    <button id="btn-refuse" onclick="refusePromise()" style="background-color: var(--red);">Nie obiecuję 🙄</button>
+                </div>
+            </div>
+        </div>
+        
+
+        <div id="phase-3" class="hidden">
+            <h2>🎮 Salon Gier 🎮</h2>
+            <p>Możesz grać we wszystkie gry ile chcesz! Baw się dobrze.</p>
+            <p style="font-weight:bold; color:var(--pink);">⚠️ Wystarczy wygrać w DWIE dowolne gry, aby odblokować prezent!</p>
+            
+            <div id="game-menu">
+                <button class="btn-game-select" onclick="startGame('memory')">
+                    <span>🃏 1. Memory (Pary)</span> <span id="s-memory">❌</span>
+                </button>
+                <button class="btn-game-select" onclick="startGame('catcher')">
+                    <span>🧺 2. Łapacz Serc (Ze Skillami!)</span> <span id="s-catcher">❌</span>
+                </button>
+                <button class="btn-game-select" onclick="startGame('wordle')">
+                    <span>🔤 3. Słowne Walentynki</span> <span id="s-wordle">❌</span>
+                </button>
+                <button class="btn-game-select" onclick="startGame('slots')">
+                    <span>🎰 4. Jackpot Miłości</span> <span id="s-slots">❌</span>
+                </button>
+                <button class="btn-game-select" onclick="startGame('pedagogy')">
+                    <span>🎓 5. Egzamin Pedagogiczny</span> <span id="s-pedagogy">❌</span>
+                </button>
+                
+                <div id="unlock-msg" class="hidden" style="color:green; font-weight:bold; margin-top:20px; font-size:1.2em; border:2px solid green; padding:10px; border-radius:10px;">
+                    🎉 Brawo! Odblokowałaś kolejna sekcje! <br>
+                    Możesz grać dalej lub odebrać nagrodę.
+                </div>
+                <button id="btn-final" class="hidden" onclick="changePhase('match')" style="background:var(--gold); color:black; font-weight:bold; width:100%; margin:20px 0; padding:20px; font-size:1.3em;">Sprawdz naszą miłość</button>
+            </div>
+
+            <div id="game-memory" class="hidden">
+                <h3>Znajdź Pary</h3>
+                <div id="mem-levels">
+                    <p>Wybierz poziom:</p>
+                    <button onclick="setupMemory('easy')" style="background:var(--green)">😌 Łatwy (3 pary)</button>
+                    <button onclick="setupMemory('hard')" style="background:var(--red)">😈 Trudny (6 par)</button>
+                </div>
+                <div id="mem-game-area" class="hidden">
+                    <div class="memory-grid" id="mem-board"></div>
+                </div>
+                <button onclick="backToMenu()" style="margin-top:20px; background:#555;">🔙 Wróć do menu</button>
+            </div>
+
+            <div id="game-catcher" class="hidden">
+                <h3>Łap Serduszka! ❤️</h3>
+                <p>Zdobądź 10 punktów.</p>
+                <p style="font-size:0.8em">❤️ +1 | 💣 -2 | Upuszczenie -1</p>
+                <p>Wynik: <span id="score">0</span>/10</p>
+                <div id="catcher-area">
+                    <div id="basket">Ty</div>
+                </div>
+                <div class="skills-bar">
+                    <button id="skill-magnet" class="skill-btn" onclick="activateMagnet()">🧲 Magnes (5s)</button>
+                    <button id="skill-freeze" class="skill-btn" onclick="activateFreeze()">❄️ Zamrożenie (5s)</button>
+                </div>
+                <div class="controls">
+                    <button ontouchstart="moveBasket(-1)" onmousedown="moveBasket(-1)">⬅️ LEWO</button>
+                    <button ontouchstart="moveBasket(1)" onmousedown="moveBasket(1)">PRAWO ➡️</button>
+                </div>
+                <button onclick="backToMenu()" style="margin-top:20px; background:#555;">🔙 Wróć do menu</button>
+            </div>
+
+            <div id="game-wordle" class="hidden">
+                <h3>Słowne Walentynki</h3>
+                <p>Zgadnij 5-literowe hasło. Tylko polskie słowa!</p>
+                <div id="wordle-msg"></div>
+                <div id="wordle-container"></div>
+                <div id="wordle-keyboard"></div>
+                <div id="wordle-restart" class="hidden" style="margin-top:20px;">
+                     <button onclick="initWordle()" style="background:var(--gold); color:black;">🔄 Następne słowo</button>
+                </div>
+                <button onclick="backToMenu()" style="margin-top:20px; background:#555;">🔙 Wróć do menu</button>
+            </div>
+
+            <div id="game-slots" class="hidden">
+                <h3>🎰 Jackpot Miłości 🎰</h3>
+                <p>Wylosuj 3 serca (❤️), aby wygrać!</p>
+                <div class="slots-container">
+                    <div class="slot-window" id="slot1">🍒</div>
+                    <div class="slot-window" id="slot2">💎</div>
+                    <div class="slot-window" id="slot3">7</div>
+                </div>
+                <button id="spin-btn" onclick="spinSlots()" style="background:var(--gold); color:black; font-weight:bold; font-size:1.5em; padding:15px 40px;">ZAKRĘĆ!</button>
+                <p id="slot-msg" style="height:20px; font-weight:bold;"></p>
+                <button onclick="backToMenu()" style="margin-top:20px; background:#555;">🔙 Wróć do menu</button>
+            </div>
+
+            <div id="game-pedagogy" class="hidden">
+                <h3>🎓 Pedagog Roku 🎓</h3>
+                <div id="ped-level-select">
+                    <p>Wybierz poziom egzaminu:</p>
+                    <button onclick="startPedGame('easy')" style="background:var(--green)">😌 Łatwy (Życiowy - 8 pytań)</button>
+                    <button onclick="startPedGame('hard')" style="background:var(--red)">🤓 Trudny (Kujonka - 8 pytań)</button>
+                </div>
+                <div id="ped-game-area" class="hidden">
+                    <p class="ped-score">Pytanie: <span id="ped-q-num">1</span> / 8</p>
+                    <div id="ped-question-text" class="ped-question"></div>
+                    <div id="ped-options"></div>
+                </div>
+                <button onclick="backToMenu()" style="margin-top:20px; background:#555;">🔙 Wróć do menu</button>
+            </div>
+        </div>
+        <div id="phase-match" class="hidden">
+    <h2>❤️ Licznik Dopasowania ❤️</h2>
+    <p>Sprawdźmy, czy naprawdę jesteśmy dla siebie stworzeni...</p>
+    
+    <div style="background: white; padding: 20px; border-radius: 15px; border: 2px solid var(--pink); margin: 20px 0;">
+        <div id="match-names" style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">
+            Ty + Ja
+        </div>
+        
+        <div style="width: 100%; background: #eee; height: 30px; border-radius: 15px; overflow: hidden; margin: 15px 0;">
+            <div id="match-bar" style="width: 0%; height: 100%; background: var(--pink); transition: width 2s ease-out;"></div>
+        </div>
+        
+        <div id="match-result" style="font-size: 2em; font-weight: bold; color: var(--pink);">0%</div>
+    </div>
+
+    <div id="match-msg" style="min-height: 50px; font-weight: bold; margin-bottom: 15px;"></div>
+    
+    <button id="btn-calc" onclick="runMatch()">Oblicz dopasowanie!</button>
+    <button id="btn-retry-match" class="hidden" onclick="runMatch()">Spróbuj ponownie 🔄</button>
+    <br>
+    <button id="btn-to-final" class="hidden" onclick="changePhase(4)" style="background: var(--gold); color: black;">Dobra, idziemy dalej >></button>
+</div>
+
+       <div id="phase-4" class="hidden">
+    <h2>🔐 Sejf Wspomnień 🔐</h2>
+    <p>Odpowiedz na 8 pytań, aby otworzyć sejf. <br>
+       <small style="color: var(--pink);">Jeśli nie pamiętasz, kliknij w serduszko ❤️ – ono Ci podpowie!</small></p>
+    
+    <div id="safe-quiz-container" class="safe-ui">
+        <p class="ped-score">Pytanie: <span id="safe-q-num">1</span> / 8</p>
+        
+        <div id="hint-heart" onclick="showSafeHint()" style="cursor: pointer; font-size: 30px; margin-bottom: 10px; display: inline-block; animation: heartbeat 1.5s infinite;">
+            ❤️
+        </div>
+        <div id="safe-hint-text" class="hidden" style="font-size: 0.85em; color: var(--pink); font-style: italic; margin-bottom: 10px;"></div>
+
+        <div id="safe-question-text" style="font-size: 1.1em; font-weight: bold; margin-bottom: 15px;"></div>
+        
+        <input type="text" id="safe-answer-input" placeholder="Twoja odpowiedź..." 
+               style="width: 90%; padding: 12px; border: 2px solid var(--pink); border-radius: 10px; margin-bottom: 15px; text-align: center;">
+        
+        <button onclick="checkSafeAnswer()" style="width: 90%; background: var(--pink); font-weight: bold;">Sprawdź odpowiedź</button>
+    </div>
+
+    <div id="safe-opened" class="hidden">
+        <div style="font-size: 60px; animation: pop 1s infinite;">🔓</div>
+        <h3 style="color: var(--green);">SEJF OTWARTY!</h3>
+        <p>Udało się! Teraz możesz przeczytać mój list.</p>
+        <button onclick="changePhase(5)" style="background: var(--gold); color: black;">CZYTAJ LIST >></button>
+    </div>
+</div>
+
+        <div id="phase-5" class="hidden">
+            <h1>KOCHAM CIĘ! ❤️</h1>
+            <div style="background:#FFF0F5; padding:20px; border:2px dashed hotpink; margin:20px 0; text-align:left;">
+                <p>Kochana Wiktorio,</p>
+                <p>
+
+Kocham Cię za to, jaka jesteś. Za Twoje dobre serce, za spokój, który wnosisz do mojego życia i za to, że mimo wszystkiego potrafisz być tak ciepłą osobą.
+
+Kocham Cię za to, że mnie wspierasz i jesteś ze mnie dumna. Twoje słowa naprawdę mają dla mnie znaczenie. Przy Tobie czuję się jak w domu — bez udawania, bez stresu, po prostu sobą.
+
+16.05.2025 to dla mnie coś więcej niż data. A Gdańsk i Twoja radość przy morzu tylko upewniły mnie, że chcę tworzyć z Tobą kolejne wspomnienia.
+
+Po prostu dziękuję, że jesteś. I że mogę być obok Ciebie.
+
+</p>
+                <p>Twój ❤️</p>
+            </div>
+            <div style="background:gold; padding:20px; border-radius:10px; font-weight:bold; border:2px solid orange;">
+                🎟️ Uprawnia do:
+💋 1 dowolnego całusa (bez limitu czasu)
+🤗 1 długiego przytulenia (minimum 60 sekund)
+🍟 Wspólnego wyjścia po frytki do Maka
+🌊 Zaplanowania kolejnego wyjazdu nad morze
+😌 Albo czegokolwiek tylko zapragnie
+
+Termin ważności:
+Na zawsze.
+
+Podpis:
+Twój osobisty chłopak 🖊
+            </div>
+            <div style="margin-top: 30px; padding: 20px; background: #fff; border-radius: 15px; border: 2px solid var(--pink);">
+    <h3>To jeszcze nie koniec... 🌹</h3>
+    <p>Kliknij poniżej, aby odebrać coś specjalnego:</p>
+    <button onclick="sendVirtualKiss()" style="background: #ff4d4d; font-size: 1.4em; padding: 20px 40px;">
+        💋 WYŚLIJ CAŁUSA I ODBIERZ KWIATY
+    </button>
+</div>
+        </div>
+        <div id="grand-finale-overlay" class="hidden">
+    <div class="finale-content">
+        <div class="beating-heart-giant">❤️</div>
+        <div class="flowers-delivery">
+            <span style="animation-delay: 0.5s">🌹</span>
+            <span style="animation-delay: 1.0s">💐</span>
+            <span style="animation-delay: 1.5s">🌷</span>
+            <span style="animation-delay: 2.0s">🌻</span>
+            <span style="animation-delay: 2.5s">🌺</span>
+        </div>
+        <h2 class="finale-text">Wszystkie kwiaty świata dla Ciebie!</h2>
+        <h2 class="finale-text">Kocham Cię bardzo</h2>
+    </div>
+</div>
+
+    </div>
+    
+
+    <script>
+        // --- DANE ---
+        const allReasons = [
+            "Kocham Cię za to, jak mnie wspierasz. Zawsze kiedy mam gorszy dzień, Ty jesteś obok. Motywujesz mnie.",
+            "Kocham Cię za to, jaka jesteś tylko dla mnie. Za ten Twój słodki sposób, w jaki się do mnie odzywasz.",
+            "Kocham Twoje dobre serce. Podziwiam Cię za to, że mimo tego, co sama przechodzisz, potrafisz być dobra dla każdego.",
+            "Kocham nasze wspomnienia. 16.05.2025 to dzień, który na zawsze zostanie w mojej głowie.",
+            "Kocham Gdańsk… widok morza i Twoje szczęście, bo tak bardzo je uwielbiasz.",
+            "Kocham Twoją nieśmiałość. To, że jesteś takim małym wstydziochem, jest dla mnie urocze.",
+            "Kocham Cię, bo przy Tobie czuję się jak w domu. Przy Tobie jest spokój, bezpieczeństwo i ciepło.",
+            "Marzę o tym, żebyśmy widywali się częściej. Każde spotkanie to dla mnie święto.",
+            "Brakuje mi Twojego dotyku na co dzień. Chciałbym być teraz obok Ciebie.",
+            "Uwielbiam Twoje zdjęcia. Wysyłaj mi ich więcej, bo nigdy nie mam dosyć patrzenia na Ciebie.",
+            "Chcę dostawać od Ciebie selfie z zaskoczenia – takie są najpiękniejsze.",
+            "Tęsknię za zapachem Twoich włosów i tym, jak się do mnie przytulasz.",
+            "Chciałbym, żebyś wysyłała mi więcej filmików, jak coś opowiadasz. Twój głos mnie uspokaja.",
+            "Moja tapeta w telefonie jest super, ale... przydałyby się nowe zdjęcia do kolekcji!",
+            "Czekam na dzień, kiedy nie będziemy musieli się żegnać na dworcu.",
+            "Każdy kilometr między nami jest warty tego, co czuję. Ale wolałbym, żeby tych kilometrów nie było.",
+            "Chcę znać każdy szczegół Twojego dnia. Pisz do mnie o wszystkim.",
+            "Marzę o wspólnym oglądaniu filmów na żywo, przytuleni pod kocem, a nie przez internet.",
+            "Twoja galeria w moim telefonie to moje ulubione miejsce, ale wciąż mi mało!",
+            "Chciałbym móc Cię przytulić w każdej chwili, gdy masz gorszy dzień.",
+            "Zrób teraz głupią minę i wyślij mi zdjęcie! Kocham Twój dystans do siebie.",
+            "Brakuje mi wspólnych spacerów bez patrzenia na zegarek i sprawdzania, kiedy masz pociąg.",
+            "Chcę więcej Twoich uśmiechów skierowanych tylko do mnie.",
+            "Planowanie kolejnego spotkania to moja ulubiona czynność.",
+            "Chciałbym kraść Ci więcej całusów na żywo.",
+            "Jesteś najpiękniejszym powodem, dla którego co chwilę sprawdzam telefon.",
+            "Wyślij mi zdjęcie tego, co teraz widzisz. Chcę patrzeć na świat Twoimi oczami.",
+            "Kocham to, że mimo odległości jesteśmy tak blisko.",
+            "Nie mogę się doczekać, aż znów wezmę Cię za rękę.",
+            "Chcę budzić się obok Ciebie i robić Ci śniadanie.",
+            "Pamiętaj, że jestem z Tobą myślami w każdej sekundzie."
+        ];
+
+        const correctFinalAnswer = "włoska"; 
+        
+        // --- WORDLE DATA ---
+        const wordleTargets = [
+    "SERCE", "CAŁUS", "SKARB", "KOCHA", "RAZEM", 
+    "MAGIA", "CUDNA", "KWIAT", "DUSZA", "ANIOŁ", 
+    "PASJA", "OGIEŃ", "BAJKA", "DOTYK", "BLASK", 
+    "BUZIA", "ZŁOTO", "IDEAŁ", "MARZĘ", "LUBIĘ", 
+    "MYŚLĘ", "CZULE", "DOBRA", "BOSKA", "WINKO", 
+    "KAWKA", "PLAŻA", "RANEK", "SZEPT", "WIDOK", 
+    "FOTKA", "LISTY", "SŁOWA", "GESTY", "MISIA",
+    "MOTYL", "TULIĆ", "ZGODA", "WIERZ", "AMORY", 
+    "OCZKO", "TYLKO", "NASZE", "MIŁOŚ", "TWOJA", 
+    "TWOJE", "UROK", "UROKI", "WIĘZI", "DARZĘ"
+];
+
+        // OGROMNY SŁOWNIK (Do walidacji)
+        const validWords = [
+            ...wordleTargets,
+            "WOREK", "WAZON", "KUBEK", "OKNA", "DRZWI", "KARTA", "MAPA", "LAMPA", "FOTEL", "OBRAZ", "ŚCIANA", "PODŁOGA", "SUFIT", "KABEL", "MYSZ", "EKRAN",
+            "WODA", "SOK", "MLEKO", "KAWA", "HERBA", "ZUPA", "DANIE", "MIĘSO", "RYBA", "JAJKO", "CHLEB", "BUŁKA", "MASŁO", "SER", "DŻEM", "MIÓD",
+            "OWOC", "JABŁK", "GRUSZ", "ŚLIWA", "BANAN", "CYTRY", "AGREST", "MALIN", "JAGOD", "WARZY", "MARCH", "ZIEMN", "BURAK", "CEBUL", "CZOSN",
+            "KOTEK", "PIESK", "KROWA", "ŚWINK", "KOŃ", "OWCA", "KOZA", "KURA", "KACZK", "GĘŚ", "INDYK", "RYBKA", "PTAK", "WRÓBE", "GOŁĄB", "ORZEŁ",
+            "DOMEK", "BLOK", "WIEŻA", "ZAMEK", "PAŁAC", "WILLA", "CHATK", "SZAŁA", "NAMI", "HOTEL", "POKÓJ", "SALON", "KUCHN", "ŁAZIE", "GARAŻ",
+            "AUTO", "POCIĄ", "STATE", "ŁÓDKA", "JACHT", "MOTOR", "SKUTE", "BUSIK", "TRAMW", "METRO", "SAMOL", "RAKIE", "DROGA", "ULICA", "MOST",
+            "SZKOŁ", "PRACA", "BIURO", "SKLEP", "BANK", "POCZT", "SZPIT", "APTEK", "KINO", "TEATR", "OPERA", "MUZEU", "PARK", "LAS", "ŁĄKA",
+            "MAMA", "TATA", "BABC", "DZIAD", "WUJEK", "CIOCI", "BRAT", "SIOST", "SYN", "CÓRKA", "WNUK", "WNUCZ", "MĄŻ", "ŻONA", "TEŚĆ",
+            "GŁOWA", "RĘKA", "NOGA", "BRZUC", "PLECY", "SZYJA", "WŁOSY", "OCZY", "USZY", "NOS", "USTA", "ZĘBY", "JĘZYK", "PALEC", "PAZNO",
+            "BLUZK", "SPODN", "SPÓDN", "SUKIE", "SWETE", "KURTK", "PŁASZ", "CZAPK", "SZAL", "RĘKAW", "BUTY", "SKARP", "MAJTK", "BIUST", "PIGAM",
+            "ZEGAR", "CZAS", "GODZI", "MINUT", "SEKUN", "RANO", "WIECZ", "NOC", "DZIEŃ", "TYDZ", "MIESI", "ROK", "WIOSN", "LATO", "JESIE", "ZIMA",
+            "SŁOŃC", "KSIĘŻ", "GWIAZ", "CHMUR", "DESZC", "ŚNIEG", "WIATR", "BURZA", "MGŁA", "MRÓZ", "CIEPŁ", "ZIMNO", "JASNO", "CIEMN", "MOKRO",
+            "DOBRY", "ZŁY", "DUŻY", "MAŁY", "STARY", "NOWY", "MŁODY", "ŁADNY", "BRZYD", "CZYST", "BRUDN", "SZYBK", "WOLNY", "CIEPŁ", "ZIMNY",
+            "BIAŁY", "CZARN", "SZARY", "CZERW", "ZIELO", "NIEBI", "ŻÓŁTY", "BRĄZO", "RÓŻOW", "FIOLE", "POMAR", "ZŁOTY", "SREBR", "KOLOR", "BARWA",
+            "JEDEN", "DWA", "TRZY", "CZTER", "PIĘĆ", "SZEŚĆ", "SIEDM", "OSIEM", "DZIEW", "DZIES", "STO", "TYSIĄ", "MILIO", "LICZB", "CYFRA",
+            "ROBIĆ", "MIEĆ", "BYĆ", "IŚĆ", "JCHAĆ", "JEŚĆ", "PIĆ", "SPAĆ", "WSTAĆ", "MYĆ", "UBRAĆ", "KOCHA", "LUBIĆ", "CHCIE", "MÓC", "UMIEĆ",
+            "KARTY", "GRACZ", "PLANS", "PIONE", "KOSTK", "RUNDA", "START", "META", "WYNIK", "PUNKT", "FAUL", "GOL", "KOSZ", "BRAMK", "SĘDZIA",
+            "LUSTRO", "STOŁK", "ŁAWKA", "TRAWA", "PIASE", "MORZE", "RZEKA", "JEZIO", "SKAŁA", "GÓRA", "DOLIN", "DESKA", "ŚRUBA", "MŁOTE", "GWOŹD",
+            "KLUCZ", "ZAMEK", "PILOT", "RADIO", "WIDEO", "PŁYTA", "KOSZ", "WORKI", "PUDŁO", "REGAŁ", "PÓŁKA", "SZAFA", "ŁÓŻKO", "BIURK", "KRZES",
+            "OBRUS", "KOCYK", "POŚCI", "PODUS", "KOŁDR", "RĘCZN", "MYDŁO", "KREM", "SZMIN", "TUSZ", "WACIK", "GRZEB", "SZCZOT", "GĄBKA", "WANI",
+            "PRALK", "SUSZA", "ZMYWA", "LODÓW", "PIEKA", "MIKSE4", "CZAJN", "GARNE", "PATEL", "MISKA", "ŁYŻKA", "WIDE", "NÓŻ", "SZKLA", "KIELI",
+            "BUTEL", "PUSZK", "SŁOIK", "TORBA", "PLECA", "WALIZ", "PORTF", "ZEGAR", "TELEF", "TABLE", "LAPTO", "MYSZK", "DRUKA", "SKANE", "LAMBK",
+            "ŚWIEC", "ZAPAŁ", "OGNIS", "DREWN", "WĘGIEL", "POPIÓ", "DYM", "PARA", "LÓD", "GRAD", "SZRON", "ROSA", "TĘCZA", "BURZA", "PIORU",
+            "GROM", "HAŁAS", "CISZA", "DŹWIĘ", "MUZYK", "PIOSN", "TANIEC", "KROK", "SKOK", "BIEG", "MARSZ", "SPACE", "JAZDA", "LOT", "REJS",
+            "BILET", "PASZP", "DOWÓD", "PRAWO", "UMOWA", "FAKTU", "PARAG", "RESZT", "CENA", "KOSZT", "ZYSK", "DŁUG", "KREDY", "RATA", "BANKO",
+            "MONET", "GROSZ", "ZŁOTY", "DOLAR", "EURO", "FUNT", "JEN", "FRANK", "KASSA", "SEJF", "SKARB", "ZŁOTO", "SREBR", "BRĄZ", "MIEDŹ",
+            "ŻELAZ", "STAL", "BETON", "CEGŁA", "KAMIE", "PIACH", "GLINA", "ZIOŁO", "KWIAT", "DRZEW", "KRZAK", "TRAWA", "MCHY", "GRZYB", "LASY",
+        // RZECZY I DOM
+            "ROWER", "BRAMA", "KUBEK", "LAMPA", "FOTEL", "OBRAZ", "SZAFA", "ŁÓŻKO", "DESKA", "ŚRUBA", "KLUCZ", "ZAMEK", "WOREK", "KOSZ", "PUDŁO", "KARTA", 
+            "MYSZY", "EKRAN", "KABEL", "LISTA", "PAPIER", "PIÓRO", "ZESZYT", "KSIĄŻ", "SZYBA", "DACHY", "CEGŁA", "BETON", "RURKA", "KRAN", "WANNA", "ZLEW",
+            "PRĄD", "GAZ", "WODA", "OGIEŃ", "DREWN", "POKÓJ", "SALON", "GARAŻ", "TARAS", "BALKO", "SCHOD", "WINDA", "PIĘTR", "PARTE", "MIESZ", "DOMRK",
+            // JEDZENIE
+            "CHLEB", "BUŁKA", "MASŁO", "MLEKO", "KAKAO", "KAWA", "DANIE", "OBIAD", "KOLAC", "ZUPA", "MIĘSO", "RYBA", "JAJKO", "MĄKA", "CUKIE", "SÓL",
+            "CIAST", "TORTY", "LODY", "OWOC", "JABŁK", "BANAN", "CYTRY", "MELON", "ARBUZ", "ŚLIWA", "GRUSZ", "WIŚNI", "MALIN", "JAGOD", "AGRES", "DŻEM",
+            "PIZZA", "KEBAB", "BURGE", "FRYTK", "CHIPS", "KOLA", "WINO", "PIWO", "WÓDKA", "TOAST", "BARY", "LUNCH", "SMAK", "WĘCH", "GŁÓD", "SYTY",
+            // NATURA I ZWIERZĘTA
+            "KOTEK", "KOCUR", "PIESK", "SZCZE", "KROWA", "ŚWINI", "KOZA", "OWCA", "BARAN", "KOŃ", "KLACZ", "ŹREBI", "KURA", "KOGUT", "GĘŚ", "KACZK",
+            "PTAK", "WRÓBE", "GOŁĄB", "SROKA", "WRONA", "ORZEŁ", "SOKOŁ", "SOWA", "RYBKA", "REKIN", "WIELK", "DELFI", "WĄŻ", "ŻABA", "ROBAK", "MUCHA",
+            "KOMAR", "OSA", "PSZCZO", "BĄK", "MOTYL", "ĆMA", "PAJĄK", "MRÓWK", "LISY", "WILK", "NIKI", "DZIK", "SARNA", "JELEŃ", "ŁOŚ", "ŻUBR",
+            "DRZEW", "KRZAK", "TRAWA", "KWIAT", "RÓŻA", "TULIP", "BRZOZ", "DĄB", "SOSNA", "ŚWIER", "LASY", "GÓRY", "RZEKA", "MORZE", "PLAŻA", "PIACH",
+            "SKAŁA", "ZIEMI", "GLINA", "BŁOTO","WARGA","LALKA", "KURZ", "PYŁ", "WIATR", "DESZC", "ŚNIEG", "MRÓZ", "LÓD", "GRAD", "BURZA", "SŁOŃC", "CHMUR", "NIEBO",
+            // CZŁOWIEK I CIAŁO
+            "GŁOWA", "WŁOSY", "CZOŁO", "OCZY", "USZY", "NOS", "USTA", "ZĘBY", "JĘZYK", "BRODA", "SZYJA", "BARK", "RĘKA", "DŁOŃ", "PALEC", "PAZNO",
+            "KCIUK", "ŁOKIE", "PACHA", "PLECY", "KLATA", "PIERŚ", "BRZUC", "PĘPEK", "BIODR", "PUPA", "NOGA", "UDO", "KOLAN", "ŁYDKA", "STOPA", "PIĘTA",
+            "SERCE", "PŁUCA", "NERKI", "KREW", "KOŚCI", "SKÓRA", "MIĘŚN", "MÓZG", "MYŚL", "GŁOS", "SŁUCH", "WZROK", "DOTYK", "CZUCIE", "ZDROW", "CHORY",
+            // UBRANIA
+            "BLUZK", "KOSZU", "SWETE", "GOLF", "DRESY", "SPODN", "JEANS", "SZORT", "SPÓDN", "SUKIE", "GARNI", "MARYN", "KAMIZ", "KURTK", "PŁASZ", "FUTRO",
+            "CZAPK", "SZAL", "RĘKAW", "SKARP", "BUTY", "TRAMP", "KOZAK", "SZPIL", "KAPCI", "PASEK", "ZEGAR", "TORBA", "PLECA", "MAJTK", "STANIK", "PIŻAM",
+            // CZASOWNIKI (ROBIĆ COŚ)
+            "ROBIĆ", "MIEĆ", "BYĆ", "IŚĆ", "JCHAĆ", "BIEC", "LATAĆ", "PŁYWA", "SKAKA", "SIEDZ", "STAĆ", "LEŻEĆ", "SPAĆ", "WSTAĆ", "MYĆ", "JEŚĆ",
+            "PIĆ", "GADAĆ", "MÓWIĆ", "PISAĆ", "CZYTA", "LICZY", "UCZYĆ", "UMIEĆ", "WIEDZ", "ZNAĆ", "LUBIĆ", "KOCHA", "WOLEĆ", "CHCIE", "MÓC", "MUSIE",
+            "GRAĆ", "BAWIĆ", "ŚMIAĆ", "PŁAKA", "KRZYC", "SZEPT", "DODAĆ", "ODJĄĆ", "BRAĆ", "DAĆ", "KUPIĆ", "PŁACI", "NOSIĆ", "UBRAĆ", "ZDJĄĆ", "PRAĆ",
+            "MYŚLE", "MARZY", "SNIĆ", "BAĆ", "CZUĆ", "WIDZI", "SŁYSZ", "WĄCHA", "DOTKN", "CAŁOW", "TULIĆ", "KOJAR", "PYTAĆ", "PROSI", "KAZAĆ", "WITAC",
+            // PRZYMIOTNIKI
+            "DOBRY", "ZŁY", "DUŻY", "MAŁY", "DŁUGI", "KRÓTK", "NOWY", "STARY", "MŁODY", "ŁADNY", "BRZYD", "JASNY", "CIEMN", "CIEPŁ", "ZIMNY", "SŁODK",
+            "KWAŚN", "GORZK", "OSTRY", "SŁONY", "TWARD", "MIĘKK", "SUCHY", "MOKRY", "PEŁNY", "PUSTY", "CZYST", "BRUDN", "SZYBK", "WOLNY", "TANIE", "DROGI",
+            "BIAŁY", "CZARN", "SZARY", "ŻÓŁTY", "ZLOTA", "SREBR", "RÓŻOW", "MODNY", "FAJNY", "SUPER", "EXTRA", "NUDNY", "CIEKA", "GŁUPI", "MĄDRY", "MIŁY",
+            // INNE
+            "SZKOŁ", "PRACA", "URLOP", "WAKAC", "ŚWIĘT", "DZIEŃ", "NOC", "RANO", "TERAZ", "ZARAZ", "JUTRO", "WCZOR", "TYDZ", "MIESI", "ROK", "CZAS",
+            "PUNKT", "WYNIK", "START", "META", "ZŁOTY", "DOLAR", "EURO", "RESZT", "KOSZT", "CENA", "SKLEP", "KASA", "BILET", "KINO", "FILM", "SEANS"
+        ];
+
+        let currentWordleTarget = "";
+        let currentGuess = "";
+
+        // --- PEDAGOGIKA DATA ---
+
+        // BAZA ŁATWA (50 PYTAŃ) - PEDAGOGIKA ZWIĄZKU (TY I ONA)
+        const pedQuestionsEasy = [
+            { q: "Obiekt (ja) marudzi, że tęskni. Reakcja?", a: ["Weź się w garść.", "Empatia: Dzwonię na kamerce!", "Uwaga do dziennika."], ok: 1 },
+            { q: "Obiekt zrobił coś głupiego, ale chciał dobrze.", a: ["Do kąta.", "Wzmocnienie pozytywne: Doceniasz chęci.", "Telefon do rodziców."], ok: 1 },
+            { q: "Najlepsza metoda integracji po rozłące?", a: ["Przytulanie i pizza.", "Kartkówka.", "Wykład."], ok: 0 },
+            { q: "Obiekt jest smutny. Co robisz?", a: ["Ignorujesz.", "Stosujesz terapię całusami.", "Krzyczysz."], ok: 1 },
+            { q: "Obiekt nie odpisuje 5 minut. Diagnoza?", a: ["Zdradza.", "Zasnął albo pracuje.", "Nie kocha."], ok: 1 },
+            { q: "Jaka nagroda najlepiej działa na Obiekt?", a: ["Czekolada.", "Twoje zdjęcie.", "Nowe skarpetki."], ok: 1 },
+            { q: "Jak spędzamy idealny wieczór?", a: ["Osobno.", "Netflix i przytulanie.", "Kłótnia."], ok: 1 },
+            { q: "Co jest fundamentem naszego związku?", a: ["Zaufanie i miłość.", "Pieniądze.", "Gry komputerowe."], ok: 0 },
+            { q: "Doszło do sprzeczki. Jaką metodę stosujesz?", a: ["Ciche dni.", "Szczera rozmowa.", "Foch stulecia."], ok: 1 },
+            { q: "Obiekt stresuje się pracą/studiami. Ty:", a: ["Mówisz 'nie przesadzaj'.", "Wspierasz i wierzysz w niego.", "Dajesz mu więcej zadań."], ok: 1 },
+            { q: "Obiekt wysyła Ci głupią minę na Snapie. Twoja ocena?", a: ["Niedostateczny (brak estetyki).", "Celujący (uroczy wariat).", "Poprawny."], ok: 1 },
+            { q: "Najlepszy bodziec, żeby wygonić Obiekt z łóżka?", a: ["Krzyk 'pożar!'.", "Zapach świeżej kawy.", "Zabranie kołdry."], ok: 1 },
+            { q: "Obiekt gapi się na Ciebie bez słowa. Diagnoza?", a: ["Zawieszenie systemu.", "Intensywne uwielbienie pomocy naukowej.", "Głód."], ok: 1 },
+            { q: "Gdy Obiekt mówi 'Nic się nie stało', to Pani Pedagog:", a: ["Wierzy mu.", "Wie, że ma przesrane i drąży temat.", "Idzie spać."], ok: 1 },
+            { q: "Najlepsza pomoc dydaktyczna w naszym związku?", a: ["Koc i serial.", "Kij i marchewka.", "Mapa do pizzerii."], ok: 0 },
+            { q: "Obiekt zapomniał o czymś ważnym. Kara?", a: ["100 pompek.", "Zakaz gier przez godzinę.", "Wykupienie winy słodyczami."], ok: 2 },
+            { q: "Kiedy Obiekt mówi 'Zaraz', czas realizacji wynosi:", a: ["60 sekund.", "Nigdy (wymagane ponaglenie).", "Właśnie to robię."], ok: 1 },
+            { q: "Obiekt ma 'brudne myśli'. Twoja reakcja?", a: ["Zgłoszenie do kuratorium.", "Lekcje dodatkowe w sypialni.", "Wysłanie do spowiedzi."], ok: 1 },
+            { q: "Gdy Obiekt jest głodny, staje się:", a: ["Agresywnym drapieżnikiem.", "Bardziej kochany.", "Filozofem."], ok: 0 },
+            { q: "Ulubiona aktywność rekreacyjna Obiektu z Tobą?", a: ["Spacer w deszczu.", "Leżenie razem.", "Sprzątanie."], ok: 1 },
+            { q: "Jak Obiekt okazuje zazdrość?", a: ["Robi awanturę.", "Słodko fuka i chce przytulenia.", "Pisze wiersze."], ok: 1 },
+            { q: "Gdy Obiekt dostaje Twoje zdjęcie, poziom dopaminy:", a: ["Spada.", "Wypierdala poza skalę.", "Utrzymuje się w normie."], ok: 1 },
+            { q: "Zajęcia praktyczne z przytulania powinny trwać:", a: ["15 minut.", "Tylko w weekendy.", "Minimum 2 godziny dziennie."], ok: 2 },
+            { q: "Obiekt chce 'jednego buziaka'. Ile dostaje?", a: ["Dokładnie jednego.", "Dziesięć.", "Całą serię."], ok: 2 },
+            { q: "Najskuteczniejsza resocjalizacja Obiektu?", a: ["Nagana.", "Szczera rozmowa i Twoje spojrzenie.", "Brak obiadu."], ok: 1 },
+            { q: "Obiekt prosi o masaż. To przykład:", a: ["Lenistwa.", "Potrzeby bliskości.", "Wykorzystywania Ciebie."], ok: 1 },
+            { q: "Gdy Pani Pedagog wychodzi z koleżankami, Obiekt:", a: ["Płacze w kącie.", "Tęskni grzecznie.", "Robi imprezę."], ok: 1 },
+            { q: "Idealny poranek dla Obiektu?", a: ["Bieganie o 6 rano.", "Spanie do 11 i Ty obok.", "Szybkie śniadanie."], ok: 1 },
+            { q: "Obiekt mówi 'Wyglądasz ładnie'. Twoja odpowiedź?", a: ["'Tylko ładnie?'.", "'Dziękuję, wiem'.", "'Ty też'."], ok: 0 },
+            { q: "Kiedy Obiekt chce iść spać, Ty:", a: ["Pozwalasz mu.", "Mówisz 'jeszcze jeden odcinek'.", "Zaczynasz rozmowę."], ok: 1 },
+            { q: "Fundament wychowania Obiektu?", a: ["Dyscyplina.", "Cierpliwość i miłość.", "Czekolada."], ok: 1 },
+            { q: "Obiekt kupił Ci jedzenie. To przejaw:", a: ["Empatii.", "Chęci zyskania punktów.", "Obydwu."], ok: 2 },
+            { q: "Gdy Obiekt ma gorszy dzień, potrzebuje:", a: ["Wysłuchania.", "Świętego spokoju.", "Twojego zdjęcia."], ok: 2 },
+            { q: "W skali od 1 do 10, jak Obiekt Cię kocha?", a: ["5.", "10.", "Brakło skali!"], ok: 2 },
+            { q: "Obiekt zasnął na filmie. Co robisz?", a: ["Budzisz go.", "Robisz zdjęcie i przykrywasz go.", "Obrażasz się."], ok: 1 },
+            { q: "Widok Ciebie po tygodniu wywołuje u niego:", a: ["Ulgę.", "Czystą radość i motyle.", "Głód."], ok: 1 },
+            { q: "Najlepszy sposób na 'focha' Obiektu?", a: ["Poczekanie.", "Atak całusami.", "Przeproszenie za nic."], ok: 1 },
+            { q: "Obiekt obiecał umyć naczynia. Kiedy to zrobi?", a: ["Od razu.", "Jak skończy mecz/rundę.", "Nigdy."], ok: 1 },
+            { q: "Kto lepiej prowadzi auto?", a: ["Ja", "On", "Oboje tak samo słabo."], ok: 1 },
+            { q: "Obiekt uważa, że jesteś:", a: ["Mądra i piękna.", "Tylko mądra.", "Tylko piękna."], ok: 0 },
+            { q: "Największy talent Obiektu?", a: ["Gotowanie.", "Denerwowanie Cię słodko.", "Spanie."], ok: 1 },
+            { q: "Gdy Obiekt Cię przytula, czuje się:", a: ["Jak w domu.", "Jak na egzaminie.", "Jak w kinie."], ok: 0 },
+            { q: "Co zrobić, gdy Obiekt 'gwiazdorzy'?", a: ["Przywołać do porządku.", "Dać autograf.", "Zignorować."], ok: 0 },
+            { q: "Obiekt (ja) to Twój ulubiony:", a: ["Wychowanek.", "Problem.", "Pacjent."], ok: 0 },
+            { q: "Prośba o buziaka to metoda:", a: ["Perswazji.", "Szantażu.", "Manipulacji urokiem."], ok: 0 },
+            { q: "Pani Pedagog ma zawsze:", a: ["Rację.", "Ciężko z nim.", "Obydwie odpowiedzi."], ok: 2 },
+            { q: "Najlepsza metoda na wspólny rozwój?", a: ["Podróże.", "Planowanie przyszłości.", "Jedzenie pizzy."], ok: 1 },
+            { q: "Obiekt bez Ciebie to jak:", a: ["Nauczyciel bez kawy.", "Dziecko bez zabawki.", "Telefon bez baterii."], ok: 2 },
+            { q: "Kto częściej mówi 'Kocham Cię'?", a: ["On.", "Ty.", "Oboje tyle samo."], ok: 2 },
+            { q: "Czy Obiekt zasługuje na prezent?", a: ["Zależy.", "Zdecydowanie tak!", "Nie wiem."], ok: 1 }
+        ];
+
+        // BAZA TRUDNA (50 PYTAŃ) - PRAWDZIWA PEDAGOGIKA
+       const pedQuestionsHard = [
+    { q: "Strefa najbliższego rozwoju to pojęcie:", a: ["Piageta.", "Wygotskiego.", "Brunera."], ok: 1 },
+    { q: "Pajdocentryzm stawia w centrum:", a: ["Dziecko.", "Nauczyciela.", "Program."], ok: 0 },
+    { q: "Kto założył Casa dei Bambini?", a: ["Maria Montessori.", "Janusz Korczak.", "C. Freinet."], ok: 0 },
+    { q: "Behawioryzm skupia się na:", a: ["Podświadomości.", "Bodźcach i reakcjach.", "Uczuciach."], ok: 1 },
+    { q: "Kto napisał 'Jak kochać dziecko'?", a: ["Korczak.", "Grzegorzewska.", "Sempołowska."], ok: 0 },
+    { q: "Edukacja permanentna to:", a: ["Nauka w szkole.", "Uczenie się przez całe życie.", "Studia."], ok: 1 },
+    { q: "Dysgrafia to trudność w:", a: ["Czytaniu.", "Pisaniu.", "Liczeniu."], ok: 1 },
+    { q: "Tabula rasa to termin:", a: ["Locke'a.", "Rousseau.", "Platona."], ok: 0 },
+    { q: "Pedagogika waldorfska to:", a: ["Steiner.", "Dewey.", "Parkhurst."], ok: 0 },
+    { q: "Andragogika bada nauczanie:", a: ["Dzieci.", "Dorosłych.", "Młodzieży."], ok: 1 },
+    { q: "System klasowo-lekcyjny stworzył:", a: ["Komeński.", "Herbart.", "Locke."], ok: 0 },
+    { q: "Socjalizacja pierwotna zachodzi w:", a: ["Szkole.", "Rodzinie.", "Pracy."], ok: 1 },
+    { q: "Rewalidacja dotyczy osób:", a: ["Zdolnych.", "Z niepełnosprawnością.", "Dorosłych."], ok: 1 },
+    { q: "Dysleksja to trudności w:", a: ["Czytaniu.", "Liczeniu.", "Mówieniu."], ok: 0 },
+    { q: "Ochronki w Polsce to zasługa:", a: ["Bojanowskiego.", "Jordana.", "Dawida."], ok: 0 },
+    { q: "Oligofrenopedagogika to praca z osobami:", a: ["Z niepełnosprawnością intelektualną.", "Niesłyszącymi.", "Niewidomymi."], ok: 0 },
+    { q: "Plan Daltoński to:", a: ["Parkhurst.", "Montessori.", "Neill."], ok: 0 },
+    { q: "Surdopedagogika to praca z:", a: ["Niewidomymi.", "Głuchymi.", "Z ADHD."], ok: 1 },
+    { q: "Tyflopedagogika to praca z:", a: ["Niewidomymi.", "Głuchymi.", "Autystykami."], ok: 0 },
+    { q: "Metoda projektów to:", a: ["Kilpatrick/Dewey.", "Skinner.", "Freud."], ok: 0 },
+    { q: "Wychowanie naturalne postulował:", a: ["Rousseau.", "Pestalozzi.", "Froebel."], ok: 0 },
+    { q: "Piramida Maslowa - dół to potrzeby:", a: ["Bezpieczeństwa.", "Fizjologiczne.", "Uznania."], ok: 1 },
+    { q: "Metoda Sherborne to:", a: ["Ruch rozwijający.", "Nauka czytania.", "Muzykoterapia."], ok: 0 },
+    { q: "Scaffolding to metafora:", a: ["Brunera.", "Piageta.", "Eriksona."], ok: 0 },
+    { q: "Szkoła Summerhill to przykład:", a: ["Antypedagogiki.", "Pedagogiki autorytarnej.", "Szkół kościelnych."], ok: 0 },
+    { q: "Okresy sensytywne opisała:", a: ["Montessori.", "Grzegorzewska.", "Key."], ok: 0 },
+    { q: "Dydaktyka to nauka o:", a: ["Wychowaniu.", "Nauczaniu i uczeniu się.", "Historii."], ok: 1 },
+    { q: "Emancypacja w pedagogice to:", a: ["Wyzwolenie/usamodzielnienie.", "Karanie.", "Nagradzanie."], ok: 0 },
+    { q: "Kto stworzył system prewencyjny?", a: ["Jan Bosko.", "Ignacy Loyola.", "Pijarzy."], ok: 0 },
+    { q: "Zabawa tematyczna to inaczej:", a: ["Ruchowa.", "W role.", "Konstrukcyjna."], ok: 1 },
+    { q: "Co to jest inkluzja?", a: ["Włączenie.", "Wykluczenie.", "Segregacja."], ok: 0 },
+    { q: "Metoda ośrodków pracy to:", a: ["Grzegorzewska.", "Radlińska.", "Doroszewska."], ok: 0 },
+    { q: "Pedagogika społeczna to:", a: ["Radlińska.", "Znaniecki.", "Koneczny."], ok: 0 },
+    { q: "Wychowanie estetyczne to wychowanie przez:", a: ["Sport.", "Sztukę.", "Pracę."], ok: 1 },
+    { q: "Progresywizm pedagogiczny to:", a: ["Dewey.", "Kant.", "Hegel."], ok: 0 },
+    { q: "Koncepcja inteligencji wielorakich to:", a: ["Gardner.", "Goleman.", "Spearman."], ok: 0 },
+    { q: "Inteligencja emocjonalna to:", a: ["Goleman.", "Gardner.", "Binet."], ok: 0 },
+    { q: "Skala inteligencji Bineta służy do:", a: ["Badania IQ.", "Badania wzroku.", "Badania słuchu."], ok: 0 },
+    { q: "Socjometria (Moreno) bada:", a: ["Relacje w grupie.", "Wzrost dzieci.", "Zasób słów."], ok: 0 },
+    { q: "Koncepcja 'ukrytego programu' dotyczy:", a: ["Nieoficjalnych treści w szkole.", "Planu lekcji.", "Podręczników."], ok: 0 },
+    { q: "Wychowanie do wolności to:", a: ["Steiner.", "Korczak.", "Neill."], ok: 2 },
+    { q: "Pedagogika opiekuńcza zajmuje się:", a: ["Sieroctwem/opieką.", "Tylko szkołą.", "Sportem."], ok: 0 },
+    { q: "Zasada poglądowości to:", a: ["Nauka na konkretach.", "Nauka z pamięci.", "Brak obrazków."], ok: 0 },
+    { q: "Koncepcja 'szkoły pracy' to:", a: ["Kerschensteiner.", "Marx.", "Weber."], ok: 0 },
+    { q: "Aksjologia to nauka o:", a: ["Wartościach.", "Metodach.", "Celach."], ok: 0 },
+    { q: "Teleologia pedagogiczna to nauka o:", a: ["Celach wychowania.", "Środkach.", "Wynikach."], ok: 0 },
+    { q: "Personalizm stawia w centrum:", a: ["Osobę.", "Grupę.", "Społeczeństwo."], ok: 0 },
+    { q: "Habitus to pojęcie:", a: ["Bourdieu.", "Foucaulta.", "Durkheima."], ok: 0 },
+    { q: "Pedagogika krytyczna to:", a: ["Giroux/Freire.", "Piaget.", "Skinner."], ok: 0 },
+    { q: "Co to jest autorytaryzm?", a: ["Bezwzględne posłuszeństwo.", "Partnerstwo.", "Brak zasad."], ok: 0 },
+    { q: "Pedagogika kultury to nurt:", a: ["Sprangera.", "Diltheya.", "Obu wymienionych."], ok: 2 },
+    { q: "Metoda Montessori kładzie nacisk na:", a: ["Dyscyplinę zewnętrzną.", "Samodzielność (Pomóż mi zrobić to samemu).", "Wykłady nauczyciela."], ok: 1 },
+    { q: "Koncepcja wychowania narodowego to:", a: ["Bronisław Trentowski.", "Zygmunt Mysłakowski.", "Bogdan Nawroczyński."], ok: 0 },
+    { q: "Czym zajmuje się pedeutologia?", a: ["Rozwojem dziecka.", "Nauczycielem i jego zawodem.", "Budową szkół."], ok: 1 },
+    { q: "Warunkowanie klasyczne odkrył:", a: ["Pawłow.", "Thorndike.", "Watson."], ok: 0 },
+    { q: "Zasada 'wszystkiego wszystkich nauczać' to hasło:", a: ["Komeńskiego.", "Herbarta.", "Deweya."], ok: 0 },
+    { q: "Teoria asocjacyjna Herbarta dotyczy:", a: ["Kojarzenia wyobrażeń.", "Kultury fizycznej.", "Uczenia się ról."], ok: 0 },
+    { q: "Co to jest kognitywizm?", a: ["Nurt badający procesy poznawcze.", "Nauka o mięśniach.", "Teoria kar i nagród."], ok: 0 },
+    { q: "Inkluzyjność w edukacji to:", a: ["Segregacja uczniów.", "Włączanie wszystkich do wspólnej nauki.", "Wykluczanie słabszych."], ok: 1 },
+    { q: "Kto wprowadził pojęcie 'pedagogika'?", a: ["Herbart.", "Kanty.", "Platon."], ok: 0 },
+    { q: "Czym jest socjalizacja wtórna?", a: ["Nauką w rodzinie.", "Nauką ról społecznych poza rodziną.", "Odpoczynkiem."], ok: 1 },
+    { q: "Pedeutologia to nauka o:", a: ["Metodach nauczania.", "Osobowości i pracy nauczyciela.", "Uczniu."], ok: 1 },
+    { q: "Kto stworzył teorię pola?", a: ["Kurt Lewin.", "Carl Jung.", "Alfred Adler."], ok: 0 },
+    { q: "Metoda Dennisona to inaczej:", a: ["Gimnastyka mózgu.", "Metoda harcerska.", "Praca w grupach."], ok: 0 },
+    { q: "Czym jest facylitacja?", a: ["Utrudnianiem nauki.", "Ułatwianiem procesów grupowych.", "Ocenianiem uczniów."], ok: 1 },
+    { q: "Koncepcja wychowania przez pracę to:", a: ["Blonski.", "Makarenko.", "Obaj wymienieni."], ok: 2 },
+    { q: "Czym zajmuje się pedagogika porównawcza?", a: ["Analizą systemów w różnych krajach.", "Porównywaniem ocen.", "Analizą rodzeństwa."], ok: 0 },
+    { q: "Co to jest anamneza u Platona?", a: ["Zapominanie.", "Przypominanie sobie wiedzy duszy.", "Nauka pisania."], ok: 1 },
+    { q: "Kto napisał 'Wielką Dydaktykę'?", a: ["Komeński.", "Locke.", "Rousseau."], ok: 0 },
+    { q: "Edukacja alternatywna to:", a: ["Szkoły publiczne.", "Szkoły poza systemem państwowym.", "Zajęcia WF."], ok: 1 },
+    { q: "Czym jest akomodacja u Piageta?", a: ["Dopasowaniem struktur do nowej wiedzy.", "Wchłonięciem wiedzy.", "Odpoczynkiem."], ok: 0 },
+    { q: "Co to jest asymilacja u Piageta?", a: ["Włączenie nowych danych do istniejących schematów.", "Zmiana schematów.", "Sen."], ok: 0 },
+    { q: "Kto stworzył hierarchię potrzeb?", a: ["Maslow.", "Freud.", "Fromm."], ok: 0 },
+    { q: "Czym zajmuje się pedagogika lecznicza?", a: ["Wychowaniem dzieci chorych.", "Szyciem ran.", "Aptekami."], ok: 0 },
+    { q: "Główne dzieło Rousseau to:", a: ["'Emil'.", "'Państwo'.", "'Manifest'.",], ok: 0 },
+    { q: "Kto promował 'szkołę radosną'?", a: ["Suchodolski.", "Dawid.", "Pestalozzi."], ok: 0 },
+    { q: "Czym jest metoda 'ośrodków pracy'?", a: ["Nauką przy pracy fizycznej.", "Łączeniem treści wokół jednego tematu.", "Nauką w biurze."], ok: 1 },
+    { q: "Kto jest twórcą harcerstwa?", a: ["Robert Baden-Powell.", "Andrzej Małkowski.", "Obaj wymienieni."], ok: 2 },
+    { q: "Czym jest resocjalizacja?", a: ["Nauką chemii.", "Przywracaniem do społeczeństwa.", "Sportem."], ok: 1 },
+    { q: "Czym zajmuje się gerontagogika?", a: ["Edukacją osób starszych.", "Niemowlakami.", "Zwierzętami."], ok: 0 },
+    { q: "Kto napisał 'Pedagogikę uciśnionych'?", a: ["Paulo Freire.", "Ivan Illich.", "Henry Giroux."], ok: 0 },
+    { q: "Co to jest antypedagogika?", a: ["Bardzo surowe wychowanie.", "Rezygnacja z kierowania dzieckiem.", "Zakaz szkół."], ok: 1 },
+    { q: "Kto jest twórcą pojęcia 'społeczeństwo uczące się'?", a: ["Robert Hutchins.", "Torsten Husen.", "Obaj wymienieni."], ok: 2 },
+    { q: "Czym jest pedeutologia?", a: ["Nauką o stopach.", "Nauką o zawodzie nauczyciela.", "Nauką o grach."], ok: 1 },
+    { q: "Kto stworzył koncepcję 'Ja' odzwierciedlonego?", a: ["Charles Cooley.", "George Mead.", "Erving Goffman."], ok: 0 },
+    { q: "Co to jest dyskalkulia?", a: ["Trudność w czytaniu.", "Trudność w liczeniu.", "Brak mowy."], ok: 1 },
+    { q: "Kto założył 'Nasze Dom'?", a: ["Korczak i Falska.", "Montessori.", "Rousseau."], ok: 0 },
+    { q: "Czym jest metoda 'projektu'?", a: ["Wykładem.", "Działaniem badawczym uczniów.", "Rysowaniem."], ok: 1 },
+    { q: "Kto to jest wychowawca?", a: ["Każdy dorosły.", "Osoba świadomie kierująca rozwojem.", "Policjant."], ok: 1 },
+    { q: "Czym zajmuje się pedagogika rewalidacyjna?", a: ["Osobami z niepełnosprawnością.", "Zdolnymi uczniami.", "Sportowcami."], ok: 0 },
+    { q: "Co to jest dydaktyka ogólna?", a: ["Nauka o nauczaniu.", "Nauka o gotowaniu.", "Nauka o zwierzętach."], ok: 0 },
+    { q: "Kto promował 'nauczanie problemowe'?", a: ["W. Okoń.", "B. Suchodolski.", "A. Kamiński."], ok: 0 },
+    { q: "Czym jest socjalizacja?", a: ["Procesem stawania się członkiem społeczeństwa.", "Imprezą.", "Nauką matematyki."], ok: 0 },
+    { q: "Kto to był Johann Heinrich Pestalozzi?", a: ["Szwajcarski pedagog.", "Francuski król.", "Niemiecki fizyk."], ok: 0 },
+    { q: "Co to jest 'czarna pedagogika'?", a: ["Wychowanie przez przemoc i strach.", "Wychowanie sportowe.", "Nauka w nocy."], ok: 0 },
+    { q: "Kto stworzył system prewencyjny?", a: ["Jan Bosko.", "Ignacy Loyola.", "Filip Neri."], ok: 0 },
+    { q: "Co to jest 'ukryty program'?", a: ["Tajne lekcje.", "Nieświadomie przekazywane normy.", "Wirus komputerowy."], ok: 1 },
+    { q: "Czym zajmuje się pedagogika pracy?", a: ["Przygotowaniem do zawodu.", "Pracą w polu.", "Odpoczynkiem."], ok: 0 },
+    { q: "Kto to był Celestyn Freinet?", a: ["Twórca technik drukarskich w szkole.", "Malarz.", "Muzyk."], ok: 0 },
+    { q: "Co to jest wychowanie?", a: ["Karmienie.", "Świadome kształtowanie osobowości.", "Zabawa."], ok: 1 },
+    { q: "Czym jest empiryzm?", a: ["Wiarą w sny.", "Nauką przez doświadczenie.", "Wiarą w magię."], ok: 1 },
+    { q: "Kto napisał 'Jak kochać dziecko'?", a: ["Korczak.", "Makarenko.", "Neill."], ok: 0 },
+    { q: "Co to jest autorytaryzm?", a: ["Demokracja.", "Rządy silnej ręki i bezwzględne posłuszeństwo.", "Wolność."], ok: 1 },
+    { q: "Czym jest altruizm?", a: ["Egoizmem.", "Bezinteresowną pomocą innym.", "Nauką o gwiazdach."], ok: 1 },
+    { q: "Kto to był Jan Władysław Dawid?", a: ["Polski psycholog i pedagog.", "Pisarz.", "Polityk."], ok: 0 },
+    { q: "Co to jest empiriocentryzm?", a: ["Stawianie doświadczenia w centrum.", "Stawianie Boga w centrum.", "Brak nauki."], ok: 0 },
+    { q: "Czym jest behawioryzm?", a: ["Nauką o duszy.", "Nauką o zachowaniu.", "Nauką o kosmosie."], ok: 1 },
+    { q: "Kto to był Aleksander Kamiński?", a: ["Autor 'Kamieni na szaniec' i pedagog.", "Lekarz.", "Sportowiec."], ok: 0 },
+    { q: "Co to jest konformizm?", a: ["Bunt.", "Uleganie wpływom grupy.", "Samodzielność."], ok: 1 },
+    { q: "Czym zajmuje się pedagogika medialna?", a: ["Wpływem mediów na wychowanie.", "Naprawą telewizorów.", "Radiem."], ok: 0 },
+    { q: "Kto to był Maria Grzegorzewska?", a: ["Twórczyni pedagogiki specjalnej w Polsce.", "Piosenkarka.", "Aktorka."], ok: 0 },
+    { q: "Co to jest asertywność?", a: ["Agresja.", "Umiejętność wyrażania siebie z szacunkiem.", "Uległość."], ok: 1 },
+    { q: "Czym zajmuje się pedagogika zdrowia?", a: ["Promowaniem zdrowego stylu życia.", "Leczeniem chorób.", "Budową szpitali."], ok: 0 },
+    { q: "Kto to był Bogdan Suchodolski?", a: ["Wybitny polski pedagog i filozof.", "Piłkarz.", "Pianista."], ok: 0 },
+    { q: "Co to jest kreatywność?", a: ["Nuda.", "Zdolność tworzenia czegoś nowego.", "Naśladownictwo."], ok: 1 },
+    { q: "Czym zajmuje się pedagogika leśna?", a: ["Nauką w kontakcie z naturą.", "Ścinaniem drzew.", "Polowaniem."], ok: 0 },
+    { q: "Kto to był Stefan Szuman?", a: ["Pedagog zajmujący się estetyką i rozwojem.", "Kierowca.", "Inżynier."], ok: 0 },
+    { q: "Co to jest tolerancja?", a: ["Nienawiść.", "Szacunek dla odmienności.", "Ignorancja."], ok: 1 },
+    { q: "Czym zajmuje się pedagogika zabawy?", a: ["Wykorzystaniem gier w edukacji.", "Produkcją zabawek.", "Bieganiem."], ok: 0 }
+];
+
+        // --- MUZYKA & NAWIGACJA ---
+// Deklaracja zmiennej na samej górze skryptu (poza funkcjami)
+let currentMusic = null; 
+
+function playMusic(n, btn) {
+    // 1. Zatrzymaj aktualnie grający utwór, jeśli istnieje
+    if (currentMusic) {
+        currentMusic.pause();
+        currentMusic.currentTime = 0;
+    }
+
+    // 2. Pobierz nowy utwór na podstawie ID (bgm1 lub bgm2)
+    currentMusic = document.getElementById('bgm' + n);
+
+    if (currentMusic) {
+        // Usuń klasę aktywności ze wszystkich przycisków w panelu
+        document.querySelectorAll('.music-panel button').forEach(b => b.classList.remove('active-music'));
+        
+        // Spróbuj odtworzyć dźwięk
+        currentMusic.play().catch(error => {
+            console.log("Autoodtwarzanie zablokowane przez przeglądarkę.");
+        });
+
+        // Dodaj podświetlenie do klikniętego przycisku
+        btn.classList.add('active-music');
+    }
+}
+
+// TEJ FUNKCJI BRAKOWAŁO (to ona powoduje błąd w konsoli):
+function stopMusic() {
+    if (currentMusic) {
+        currentMusic.pause();
+        currentMusic.currentTime = 0;
+    }
+    // Usuń podświetlenie z przycisków po zatrzymaniu
+    document.querySelectorAll('.music-panel button').forEach(b => b.classList.remove('active-music'));
+}
+ 
+
+        // --- FAZA 1 ---
+        let rCount = 0;
+        function nextReason() {
+            const txt = allReasons[rCount % allReasons.length];
+            document.getElementById('reason-text').innerText = txt;
+            rCount++;
+            document.getElementById('reason-counter').innerText = Math.min(rCount, 6);
+            if(rCount >= 6) document.getElementById('btn-start').classList.remove('hidden');
+        }
+
+        function unlockTL(n) {
+            document.getElementById('tl-'+(n-1)).querySelector('button').disabled = true;
+            document.getElementById('tl-'+(n-1)).querySelector('button').innerText = "✓";
+            let next = document.getElementById('tl-'+n);
+            next.classList.remove('hidden'); next.classList.add('active');
+            next.querySelector('button').disabled = false;
+            next.scrollIntoView({behavior:'smooth'});
+        }
+
+        let refuseCount = 0;
+        function refusePromise() {
+            document.getElementById('refuse-gif').classList.remove('hidden');
+            refuseCount++;
+            let scale = 1 + (refuseCount * 0.2);
+            document.getElementById('btn-promise').style.transform = `scale(${scale})`;
+        }
+
+        // --- MANAGER GIER ---
+        let unlockedFinal = false;
+        function backToMenu() {
+            stopCatcher();
+            document.getElementById('game-menu').classList.remove('hidden');
+            ['memory','catcher','wordle','slots','pedagogy'].forEach(g => document.getElementById('game-'+g).classList.add('hidden'));
+            if(unlockedFinal) {
+                document.getElementById('unlock-msg').classList.remove('hidden');
+                document.getElementById('btn-final').classList.remove('hidden');
+            }
+        }
+        function startGame(type) {
+            document.getElementById('game-menu').classList.add('hidden');
+            document.getElementById('game-'+type).classList.remove('hidden');
+            if(type === 'memory') { document.getElementById('mem-levels').classList.remove('hidden'); document.getElementById('mem-game-area').classList.add('hidden'); }
+            if(type === 'catcher') initCatcher();
+            if(type === 'wordle') initWordle();
+            if(type === 'pedagogy') { document.getElementById('ped-level-select').classList.remove('hidden'); document.getElementById('ped-game-area').classList.add('hidden'); }
+        }
+        // --- LOGIKA WYGRANYCH ---
+        let wonGames = new Set(); // Set przechowuje unikalne wygrane gry
+
+        function gameCompleted(gameId) {
+            wonGames.add(gameId); // Dodajemy id gry do zbioru zwycięstw
+            document.getElementById('s-' + gameId).innerText = "✅";
+            
+            const msg = document.getElementById('unlock-msg');
+            
+            if (wonGames.size === 1) {
+                msg.innerHTML = "🎉 Pierwsza gra zaliczona! Jeszcze tylko jedna! (1/2)";
+                msg.classList.remove('hidden');
+            } else if (wonGames.size >= 2) {
+                unlockedFinal = true;
+                msg.innerHTML = "🎉 Brawo! Odblokowałaś finał! (2/2)<br>Możesz grać dalej lub odebrać nagrodę.";
+                document.getElementById('btn-final').classList.remove('hidden');
+                msg.classList.remove('hidden');
+            }
+
+            setTimeout(() => { 
+                alert("Zadanie zaliczone! 🎉"); 
+                backToMenu(); 
+            }, 500);
+        }
+        // --- GRA 1: MEMORY ---
+        const memImages = ['zdjecie1.jpg', 'zdjecie2.jpg', 'mem3.jpg', 'mem4.jpg', 'mem5.jpg', 'mem6.jpg'];
+        let hasFlipped = false, lock = false, first, second, matches = 0, totalMatches = 0;
+        function setupMemory(level) {
+            document.getElementById('mem-levels').classList.add('hidden');
+            document.getElementById('mem-game-area').classList.remove('hidden');
+            const board = document.getElementById('mem-board'); board.innerHTML = ''; board.className = 'memory-grid'; matches = 0;
+            let cards = [];
+            if(level === 'easy') { totalMatches = 3; let s = memImages.slice(0, 3); cards = [...s, ...s]; board.classList.add('grid-easy'); } 
+            else { totalMatches = 6; cards = [...memImages, ...memImages]; board.classList.add('grid-hard'); }
+            cards.sort(() => 0.5 - Math.random());
+            cards.forEach(img => {
+                let div = document.createElement('div'); div.className = 'memory-card';
+                div.innerHTML = `<div class="front">❤️</div><div class="back"><img src="${img}"></div>`;
+                div.onclick = function() { flipCard(this) };
+                board.appendChild(div);
+            });
+        }
+        function flipCard(card) {
+            if(lock || card === first || card.classList.contains('flipped')) return;
+            card.classList.add('flipped');
+            if(!hasFlipped) { hasFlipped=true; first=card; return; }
+            second = card; checkMatch();
+        }
+        function checkMatch() {
+            let isMatch = first.querySelector('img').src === second.querySelector('img').src;
+            isMatch ? disableCards() : unflipCards();
+        }
+        function disableCards() { matches++; resetBoard(); if(matches === totalMatches) gameCompleted('memory'); }
+        function unflipCards() { lock = true; setTimeout(() => { first.classList.remove('flipped'); second.classList.remove('flipped'); resetBoard(); }, 1000); }
+        function resetBoard() { [hasFlipped, lock] = [false, false]; [first, second] = [null, null]; }
+
+        // --- GRA 2: CATCHER ---
+        let basketX = 50, score = 0, gameInterval, spawnInterval, fallSpeed = 5, basketSize = 90;
+        function initCatcher() {
+            score = 0; document.getElementById('score').innerText = 0;
+            basketX = 50; updateBasket(); fallSpeed = 5; basketSize = 90; updateBasketStyle();
+            document.getElementById('skill-magnet').disabled = false; document.getElementById('skill-freeze').disabled = false;
+            document.querySelectorAll('.falling-item').forEach(e => e.remove());
+            spawnInterval = setInterval(spawnItem, 1000); gameInterval = setInterval(gameLoop, 50);
+        }
+        function stopCatcher() { clearInterval(spawnInterval); clearInterval(gameInterval); }
+        function updateBasket() { document.getElementById('basket').style.left = basketX + '%'; }
+        function updateBasketStyle() { document.getElementById('basket').style.width = basketSize + 'px'; }
+        function moveBasket(dir) { basketX += dir * 10; if(basketX < 5) basketX = 5; if(basketX > 95) basketX = 95; updateBasket(); }
+        function activateMagnet() { basketSize = 160; updateBasketStyle(); const btn = document.getElementById('skill-magnet'); btn.disabled = true; setTimeout(() => { basketSize = 90; updateBasketStyle(); setTimeout(() => { btn.disabled = false; }, 10000); }, 5000); }
+        function activateFreeze() { fallSpeed = 2; const btn = document.getElementById('skill-freeze'); btn.disabled = true; setTimeout(() => { fallSpeed = 5; setTimeout(() => { btn.disabled = false; }, 10000); }, 5000); }
+        function spawnItem() {
+            let item = document.createElement('div'); item.className = 'falling-item';
+            let isGood = Math.random() > 0.35; item.innerText = isGood ? '❤️' : '💣'; item.dataset.type = isGood ? 'good' : 'bad';
+            item.style.left = Math.random() * 90 + '%'; item.style.top = '0px';
+            document.getElementById('catcher-area').appendChild(item);
+        }
+        function gameLoop() {
+            document.querySelectorAll('.falling-item').forEach(item => {
+                let top = parseInt(item.style.top || 0); item.style.top = (top + fallSpeed) + 'px';
+                if(top > 310 && top < 350) {
+                    let diff = Math.abs(parseInt(item.style.left) - basketX);
+                    let rng = (basketSize / document.getElementById('catcher-area').offsetWidth) * 100 / 1.5;
+                    if(diff < rng) {
+                        if(item.dataset.type === 'good') score++; else { score -= 2; document.getElementById('catcher-area').style.backgroundColor = 'red'; setTimeout(()=>document.getElementById('catcher-area').style.backgroundColor='#222', 200); }
+                        item.remove(); if(score < 0) score = 0; document.getElementById('score').innerText = score;
+                        if(score >= 10) { stopCatcher(); gameCompleted('catcher'); } return;
+                    }
+                }
+                if(top > 350) { if(item.dataset.type === 'good') { score--; if(score < 0) score = 0; document.getElementById('score').innerText = score; } item.remove(); }
+            });
+        }
+
+        // --- GRA 3: WORDLE (ZMODYFIKOWANA - Z WALIDACJĄ I OBSŁUGĄ KLAWIATURY FIZYCZNEJ) ---
+        let currentAttempt = 0;
+        const maxAttempts = 6;
+        function initWordle() {
+            currentWordleTarget = wordleTargets[Math.floor(Math.random() * wordleTargets.length)];
+            currentGuess = ""; currentAttempt = 0;
+            const c = document.getElementById('wordle-container'); c.innerHTML = '';
+            document.getElementById('wordle-restart').classList.add('hidden');
+            document.getElementById('wordle-msg').innerText = "";
+            for (let i = 0; i < maxAttempts; i++) {
+                let r = document.createElement('div'); r.className = 'w-row'; r.id = `attempt-${i}`;
+                for (let j = 0; j < 5; j++) { let b = document.createElement('div'); b.className = 'w-box'; r.appendChild(b); }
+                c.appendChild(r);
+            }
+            renderKeyboard();
+        }
+        function renderKeyboard() {
+            const kb = document.getElementById('wordle-keyboard'); kb.innerHTML = '';
+            const rows = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+            rows.forEach((rs, idx) => {
+                let rd = document.createElement('div'); rd.className = 'kb-row';
+                if(idx===2) { let e = document.createElement('div'); e.className='kb-key kb-wide'; e.innerText='✓'; e.onclick = checkWordle; rd.appendChild(e); }
+                for(let char of rs) { let k = document.createElement('div'); k.className='kb-key'; k.innerText=char; k.onclick = () => typeLetter(char); rd.appendChild(k); }
+                if(idx===2) { let b = document.createElement('div'); b.className='kb-key kb-wide'; b.innerText='⌫'; b.onclick = deleteLetter; rd.appendChild(b); }
+                kb.appendChild(rd);
+            });
+        }
+        
+        // Obsługa klawiatury fizycznej
+        document.addEventListener('keydown', (e) => {
+            if(document.getElementById('game-wordle').classList.contains('hidden')) return;
+            const key = e.key.toUpperCase();
+            if (key === 'ENTER') {
+                checkWordle();
+            } else if (key === 'BACKSPACE') {
+                deleteLetter();
+            } else if (key.length === 1 && /^[A-ZĄĆĘŁŃÓŚŹŻ]$/.test(key)) {
+                typeLetter(key);
+            }
+        });
+
+        function typeLetter(l) { if(currentGuess.length < 5) { currentGuess += l; updateGrid(); } }
+        function deleteLetter() { if(currentGuess.length > 0) { currentGuess = currentGuess.slice(0, -1); updateGrid(); } }
+        function updateGrid() {
+            let row = document.getElementById(`attempt-${currentAttempt}`);
+            let boxes = row.querySelectorAll('.w-box');
+            for(let i=0; i<5; i++) boxes[i].innerText = currentGuess[i] || "";
+        }
+        function checkWordle() {
+            const msg = document.getElementById('wordle-msg'); msg.innerText = "";
+            if(currentGuess.length !== 5) { msg.innerText = "Za krótkie!"; return; }
+            if(!validWords.includes(currentGuess)) { msg.innerText = "Nie ma takiego słowa!"; return; }
+
+            const target = currentWordleTarget.toUpperCase();
+            const row = document.getElementById(`attempt-${currentAttempt}`);
+            const boxes = row.querySelectorAll('.w-box');
+            let correctCount = 0;
+            for (let i = 0; i < 5; i++) {
+                if (currentGuess[i] === currentWordleTarget[i]) { boxes[i].classList.add('w-correct'); correctCount++; }
+                else if (currentWordleTarget.includes(currentGuess[i])) { boxes[i].classList.add('w-present'); }
+                else { boxes[i].classList.add('w-absent'); }
+            }
+            if (correctCount === 5) { wordleHeartRain(); document.getElementById('wordle-restart').classList.remove('hidden'); gameCompleted('wordle'); }
+            else {
+                currentAttempt++; currentGuess = "";
+                if (currentAttempt >= maxAttempts) { alert("Hasło to: " + currentWordleTarget); document.getElementById('wordle-restart').classList.remove('hidden'); }
+            }
+        }
+
+        // --- GRA 4: SLOTS ---
+        const slotSymbols = ['❤️', '🍒', '💎', '7', '💍', '🔥'];
+        function spinSlots() {
+            const btn = document.getElementById('spin-btn'); const msg = document.getElementById('slot-msg');
+            btn.disabled = true; msg.innerText = "";
+            let s1 = document.getElementById('slot1'), s2 = document.getElementById('slot2'), s3 = document.getElementById('slot3');
+            s1.classList.add('spin-anim'); s2.classList.add('spin-anim'); s3.classList.add('spin-anim');
+            let r1, r2, r3;
+            if(Math.random() > 0.5) { r1 = '❤️'; r2 = '❤️'; r3 = '❤️'; } 
+            else { r1 = slotSymbols[Math.floor(Math.random()*6)]; r2 = slotSymbols[Math.floor(Math.random()*6)]; r3 = slotSymbols[Math.floor(Math.random()*6)]; }
+            setTimeout(() => { s1.innerText = r1; s1.classList.remove('spin-anim'); }, 1000);
+            setTimeout(() => { s2.innerText = r2; s2.classList.remove('spin-anim'); }, 1500);
+            setTimeout(() => { 
+                s3.innerText = r3; s3.classList.remove('spin-anim'); btn.disabled = false;
+                if(r1 === '❤️' && r2 === '❤️' && r3 === '❤️') { msg.innerText = "JACKPOT!!! KOCHAM CIĘ!"; msg.style.color = "red"; gameCompleted('slots'); } else { msg.innerText = "Spróbuj jeszcze raz!"; }
+            }, 2000);
+        }
+
+        // --- GRA 5: PEDAGOGY (ZMODYFIKOWANA - FEEDBACK & LOSOWANIE) ---
+      function startPedGame(level) {
+    document.getElementById('ped-level-select').classList.add('hidden');
+    document.getElementById('ped-game-area').classList.remove('hidden');
+    currentPedIndex = 0; correctPedAnswers = 0; pedLocked = false;
+    
+    let pool = (level === 'easy') ? pedQuestionsEasy : pedQuestionsHard;
+    let questionsCount = (level === 'hard') ? 15 : 8;
+    pedGoal = (level === 'hard') ? 12 : 6;
+    
+    currentPedQuestions = [...pool].sort(() => 0.5 - Math.random()).slice(0, questionsCount); 
+    document.querySelector('.ped-score').innerHTML = `Pytanie: <span id="ped-q-num">1</span> / ${questionsCount}`;
+    loadPedQuestion();
+}
+
+function loadPedQuestion() {
+    if(currentPedIndex >= currentPedQuestions.length) {
+        if(correctPedAnswers >= pedGoal) gameCompleted('pedagogy');
+        else { alert(`Wynik: ${correctPedAnswers}. Potrzeba ${pedGoal}. Spróbuj ponownie!`); backToMenu(); }
+        return;
+    }
+    pedLocked = false;
+    const qData = currentPedQuestions[currentPedIndex];
+    document.getElementById('ped-q-num').innerText = currentPedIndex + 1;
+    document.getElementById('ped-question-text').innerText = qData.q;
+    const opts = document.getElementById('ped-options');
+    opts.innerHTML = '';
+    qData.a.forEach((txt, idx) => {
+        let b = document.createElement('button');
+        b.className = 'ped-btn';
+        b.innerText = txt;
+        b.onclick = () => answerPed(b, idx === qData.ok, qData.ok);
+        opts.appendChild(b);
+    });
+}
+
+function answerPed(btn, isCorrect, correctIdx) {
+    if(pedLocked) return;
+    pedLocked = true;
+    if(isCorrect) { btn.classList.add('ped-correct'); correctPedAnswers++; }
+    else { btn.classList.add('ped-wrong'); document.querySelectorAll('.ped-btn')[correctIdx].classList.add('ped-correct'); }
+    setTimeout(() => { currentPedIndex++; loadPedQuestion(); }, 1200);
+}
+
+
+
+    
+        // --- FINAŁ ---
+        function checkFinal() {
+            if(document.getElementById('final-answer').value.toLowerCase().includes(correctFinalAnswer)) changePhase(5);
+            else alert("Pudło!");
+        }
+        function startConfetti() {
+            for(let i=0; i<50; i++) {
+                let c = document.createElement('div'); c.className='confetti';
+                c.style.background = Math.random()>0.5?'gold':'hotpink';
+                c.style.left = Math.random()*100+'vw';
+                c.style.animation = `pop ${Math.random()*2+2}s infinite`;
+                document.body.appendChild(c);
+            }
+        }
+        function wordleHeartRain() {
+    for(let i=0; i<30; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.className = 'falling-heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            heart.style.duration = (Math.random() * 2 + 3) + 's';
+            heart.style.animationDuration = heart.style.duration;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }, i * 100);
+    }
+}
+
+// Zmodyfikowana funkcja changePhase, żeby obsługiwała nazwy (stringi)
+function changePhase(n) {
+    // 1. Ukrywamy wszystkie sekcje, które zaczynają się od "phase-"
+    document.querySelectorAll('.container > div').forEach(div => {
+        if(div.id && div.id.startsWith('phase-')) {
+            div.classList.add('hidden');
+        }
+    });
+
+    // 2. Budujemy ID celu (obsługuje np. 4 -> "phase-4" oraz "match" -> "phase-match")
+    const targetId = (typeof n === 'string' && !n.startsWith('phase-')) ? 'phase-' + n : 'phase-' + n;
+    const targetElement = document.getElementById(targetId);
+
+    // 3. Pokazujemy wybraną sekcję
+    if (targetElement) {
+        targetElement.classList.remove('hidden');
+    }
+
+    // 4. Przewijamy na górę strony
+    window.scrollTo(0, 0);
+
+    // --- LOGIKA SPECJALNA DLA KONKRETNYCH FAZ ---
+
+    // Jeśli wchodzimy do SEJFU (Faza 4), musimy go zresetować i uruchomić
+    if (n == 4 || n == '4') {
+        if (typeof startSafeQuiz === "function") {
+            startSafeQuiz(); 
+        }
+    }
+
+    // Jeśli wchodzimy do LISTU (Faza 5), odpalamy konfetti
+    if (n == 5 || n == '5') {
+        if (typeof startConfetti === "function") {
+            startConfetti();
+        }
+    }
+}
+
+function runMatch() {
+    const bar = document.getElementById('match-bar');
+    const resText = document.getElementById('match-result');
+    const msg = document.getElementById('match-msg');
+    const btnCalc = document.getElementById('btn-calc');
+    const btnRetry = document.getElementById('btn-retry-match');
+    const btnFinal = document.getElementById('btn-to-final');
+
+    // Reset
+    bar.style.width = '0%';
+    resText.innerText = '0%';
+    msg.innerText = 'Analizowanie charakterów...';
+    btnCalc.classList.add('hidden');
+    btnRetry.classList.add('hidden');
+
+    // Losujemy 99 lub 100
+    const score = Math.random() > 0.5 ? 100 : 99;
+
+    setTimeout(() => {
+        bar.style.width = score + '%';
+        
+        // Animacja cyferek
+        let count = 0;
+        let counter = setInterval(() => {
+            count++;
+            resText.innerText = count + '%';
+            if(count >= score) {
+                clearInterval(counter);
+                showMatchFinal(score);
+            }
+        }, 20);
+    }, 500);
+}
+
+function showMatchFinal(score) {
+    const msg = document.getElementById('match-msg');
+    const btnRetry = document.getElementById('btn-retry-match');
+    const btnFinal = document.getElementById('btn-to-final');
+
+    if(score === 100) {
+        msg.innerHTML = "✨ IDEAŁ! Jesteśmy dla siebie stworzeni! ❤️";
+        msg.style.color = "green";
+        btnFinal.classList.remove('hidden');
+        btnRetry.classList.add('hidden');
+    } else {
+        msg.innerHTML = "⚠️ BLISKO! Brakuje 1%... Aby dobić do 100%, musisz wysłać mi teraz swoje zdjęcie na Messengerze! 😍";
+        msg.style.color = "var(--red)";
+        btnRetry.classList.remove('hidden'); // Dajemy szansę na "ponownie", aż wylosuje 100
+    }
+}
+
+        // --- KONFIGURACJA PYTAŃ OTWARTYCH ---
+const safeQuestions = [
+    { q: "Kiedy oficjalnie zaczęliśmy być razem? Użyj kropek", key: "16.05.2025", hint: "Dzień +2 do twoich urodzin, - 2 do moich urodzin, Miesiąc: MAJ Rok: zeszły" },
+    { q: "Kto pierwszy napisał?", key: ["On","Ty"], hint: "Nie ma podpowiedzi" },
+    { q: "Gdzie pojechaliśmy w wakacje??", key: "Gdańsk", hint: "Nazwa miasta nad morzem" },
+    { q: "Gdzie był nasz pierwszy pocałunek", key: "Piła", hint: "Miasto" },
+    { q: "Jak mam zapisaną Wiktorię w telefonie?", key: "Brzdąc", hint: "MESS" },
+    { q: "Co najbardziej lubisz w McDonald’s?", key: "frytki", hint: "Zawsze podjadasz najpierw to." },
+    { q: "Ile kilometrów nas dzieli? (wpisz cyfrę)", key: "89", hint: "Sprawdz na nawigacji" },
+    { q: "Czy obiecujesz robić ze mną więcej zdjęć?", key: "tak", hint: "To jedyna słuszna odpowiedź! ❤️" }
+];
+
+let currentSafeIndex = 0;
+
+function startSafeQuiz() {
+    currentSafeIndex = 0;
+    document.getElementById('safe-quiz-container').classList.remove('hidden');
+    document.getElementById('safe-opened').classList.add('hidden');
+    loadSafeQuestion();
+}
+
+function loadSafeQuestion() {
+    if (currentSafeIndex >= safeQuestions.length) {
+        document.getElementById('safe-quiz-container').classList.add('hidden');
+        document.getElementById('safe-opened').classList.remove('hidden');
+        return;
+    }
+
+    const qData = safeQuestions[currentSafeIndex];
+    document.getElementById('safe-q-num').innerText = currentSafeIndex + 1;
+    document.getElementById('safe-question-text').innerText = qData.q;
+    document.getElementById('safe-answer-input').value = "";
+    document.getElementById('safe-hint-text').classList.add('hidden'); // Ukrywamy podpowiedź przy nowym pytaniu
+}
+
+function showSafeHint() {
+    const hintText = document.getElementById('safe-hint-text');
+    hintText.innerText = "Podpowiedź: " + safeQuestions[currentSafeIndex].hint;
+    hintText.classList.remove('hidden');
+}
+
+
+function checkSafeAnswer() {
+    const userInput = document.getElementById('safe-answer-input').value.toLowerCase().trim();
+    const qData = safeQuestions[currentSafeIndex];
+    
+    let isCorrect = false;
+    // Jeśli klucz to tablica (np. ["on", "ty"])
+    if (Array.isArray(qData.key)) {
+        isCorrect = qData.key.some(k => userInput.includes(k.toLowerCase()));
+    } else {
+        // Jeśli klucz to zwykły tekst
+        isCorrect = userInput.includes(qData.key.toLowerCase());
+    }
+
+    if (isCorrect) {
+        currentSafeIndex++;
+        if (currentSafeIndex < safeQuestions.length) {
+            alert("Brawo! Następne pytanie... ❤️");
+            loadSafeQuestion();
+        } else {
+            document.getElementById('safe-quiz-container').classList.add('hidden');
+            document.getElementById('safe-opened').classList.remove('hidden');
+        }
+    } else {
+        alert("To nie to... Spróbuj jeszcze raz albo kliknij w serduszko ❤️");
+    }
+}
+function sendVirtualKiss() {
+    // 1. Odtwórz dźwięk (jeśli masz plik kiss.mp3, odkomentuj te linie)
+    /*
+    const kissSound = new Audio('kiss.mp3');
+    kissSound.volume = 0.5;
+    kissSound.play().catch(e => console.log("Brak dźwięku całusa"));
+    */
+
+    // 2. Pokaż warstwę finałową
+    const overlay = document.getElementById('grand-finale-overlay');
+    overlay.classList.remove('hidden');
+
+    // 3. Dodatkowo puść deszcz serc (używamy istniejącej funkcji)
+    if (typeof wordleHeartRain === 'function') {
+        wordleHeartRain();
+    }
+    
+    // 4. Opcjonalnie: jeszcze więcej konfetti!
+    if (typeof startConfetti === 'function') {
+        startConfetti();
+    }
+
+    // (Opcjonalnie) Po 8 sekundach pokaż alert końcowy
+    setTimeout(() => {
+        alert("Kocham Cię! Do zobaczenia niedługo! ❤️🌹");
+    }, 8000);
+}
+
+    </script>
+</body>
+</html>
