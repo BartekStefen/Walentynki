@@ -282,7 +282,7 @@
         
         @media (max-width: 400px) {
             .w-box { width: 34px; height: 34px; font-size: 16px; }
-            .kb-key { padding: 10px 0; font-size: 12px; }
+            .kb-key { padding: 8px 0; font-size: 11px; }
         }
         /* --- NAPRAWA WYGLĄDU OSI CZASU (ZDJĘCIA I WIDEO) --- */
 
@@ -1092,17 +1092,44 @@ function stopMusic() {
             }
             renderKeyboard();
         }
-        function renderKeyboard() {
-            const kb = document.getElementById('wordle-keyboard'); kb.innerHTML = '';
-            const rows = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
-            rows.forEach((rs, idx) => {
-                let rd = document.createElement('div'); rd.className = 'kb-row';
-                if(idx===2) { let e = document.createElement('div'); e.className='kb-key kb-wide'; e.innerText='✓'; e.onclick = checkWordle; rd.appendChild(e); }
-                for(let char of rs) { let k = document.createElement('div'); k.className='kb-key'; k.innerText=char; k.onclick = () => typeLetter(char); rd.appendChild(k); }
-                if(idx===2) { let b = document.createElement('div'); b.className='kb-key kb-wide'; b.innerText='⌫'; b.onclick = deleteLetter; rd.appendChild(b); }
-                kb.appendChild(rd);
-            });
+       function renderKeyboard() {
+    const kb = document.getElementById('wordle-keyboard'); 
+    kb.innerHTML = '';
+    // Dodano czwarty rząd z polskimi znakami
+    const rows = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM", "ĄĆĘŁŃÓŚŹŻ"]; 
+    
+    rows.forEach((rs, idx) => {
+        let rd = document.createElement('div'); 
+        rd.className = 'kb-row';
+        
+        // Dodajemy Enter (✓) na początku ostatniego rzędu
+        if(idx === 3) { 
+            let e = document.createElement('div'); 
+            e.className = 'kb-key kb-wide'; 
+            e.innerText = '✓'; 
+            e.onclick = checkWordle; 
+            rd.appendChild(e); 
         }
+        
+        for(let char of rs) { 
+            let k = document.createElement('div'); 
+            k.className = 'kb-key'; 
+            k.innerText = char; 
+            k.onclick = () => typeLetter(char); 
+            rd.appendChild(k); 
+        }
+        
+        // Dodajemy Backspace (⌫) na końcu ostatniego rzędu
+        if(idx === 3) { 
+            let b = document.createElement('div'); 
+            b.className = 'kb-key kb-wide'; 
+            b.innerText = '⌫'; 
+            b.onclick = deleteLetter; 
+            rd.appendChild(b); 
+        }
+        kb.appendChild(rd);
+    });
+}
         
         // Obsługa klawiatury fizycznej
         document.addEventListener('keydown', (e) => {
